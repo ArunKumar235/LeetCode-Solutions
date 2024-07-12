@@ -5,8 +5,8 @@ class Solution {
         int n = nums.length;
         int sum = 0;
         int count = 0;
-        for(int i = 0; i<n; i++){
-            sum += nums[i];
+        for(int num: nums){
+            sum += num;
             if(prefixSum.containsKey(sum-k)){
                 count+= prefixSum.get(sum-k);
             }
