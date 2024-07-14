@@ -4,9 +4,9 @@ class Solution {
         int element = nums[0];
         for(int i: nums){
             if(count == 0){
+                count = 1;
                 element = i;
-            }
-            if(element==i){
+            }else if(element==i){
                 count++;
             }else{
                 count--;
