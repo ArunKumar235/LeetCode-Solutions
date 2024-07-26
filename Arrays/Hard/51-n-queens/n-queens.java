@@ -54,7 +54,7 @@ class Solution {
     }
 
     List<String> construct(char[][] board){
-        List < String > res = new LinkedList < String > ();
+        List < String > res = new ArrayList < String > ();
         for (int i = 0; i < board.length; i++) {
             String s = new String(board[i]);
             res.add(s);
