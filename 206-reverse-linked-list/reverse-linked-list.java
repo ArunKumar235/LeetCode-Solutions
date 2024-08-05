@@ -28,7 +28,6 @@ class Solution {
         }
         ListNode nextNode = currNode.next;
         currNode.next = prevNode;
-        prevNode = currNode;
         return reverse(currNode, nextNode);
     }
 }
