@@ -15,9 +15,7 @@ class Solution {
     }
 
     public ListNode reverse(ListNode prevNode, ListNode currNode){
-        if(currNode==null){
-            return prevNode;
-        }
+        if(currNode==null) return prevNode;
         ListNode nextNode = currNode.next;
         currNode.next = prevNode;
         return reverse(currNode, nextNode);
