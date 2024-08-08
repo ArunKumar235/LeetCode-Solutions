@@ -21,14 +21,14 @@ class Solution {
         }
         k = k % len;
         if (k==0) return head;
-        ListNode n = null;
+        ListNode prev = null;
         ListNode temp = head;
         while(k!=len){
-            n = temp;
+            prev = temp;
             temp = temp.next;
             len--;
         }
-        n.next = null;
+        prev.next = null;
         tail.next = head;
         head = temp;
         return head;
