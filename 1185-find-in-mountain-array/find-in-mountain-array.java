@@ -22,11 +22,8 @@ class Solution {
 
         while(start<end){
             int mid = start + (end-start)/2;
-            if(mountainArr.get(mid)<mountainArr.get(mid+1)){
-                start = mid+1;
-            }else{
-                end = mid;
-            }
+            if(mountainArr.get(mid)<mountainArr.get(mid+1)) start = mid+1;
+            else end = mid;
         }
         return end;
     }
