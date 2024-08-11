@@ -12,10 +12,7 @@ class Solution {
         int len = mountainArr.length() - 1;
         int peak = findPeak(0, len, mountainArr);
         int ans = binarySearch(0,peak,mountainArr, target);
-        if (ans != -1){
-            return ans;
-        }
-        return agonisticBinarySearch(peak,len,mountainArr, target);
+        return (ans != -1) ? ans : agonisticBinarySearch(peak,len,mountainArr, target);
     }
 
     public int findPeak(int start, int end, MountainArray mountainArr){
