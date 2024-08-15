@@ -1,12 +1,24 @@
 class Solution {
     public int findDuplicate(int[] nums) {
-        boolean[] ispresent = new boolean[nums.length + 1];
-        for(int i: nums){
-            if(ispresent[i]){
-                return i;
+        int i = 0;
+        while(i<nums.length){
+            if(nums[i] != i+1){
+                int correct = nums[i]-1;
+                if(nums[i] != nums[correct]){
+                    swap(nums, i, correct);
+                }else{
+                    return nums[i];
+                }
+            }else{
+                i++;
             }
-            ispresent[i] = true;
         }
         return -1;
+    }
+
+    public void swap(int[] nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
