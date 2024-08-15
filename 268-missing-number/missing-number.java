@@ -1,5 +1,6 @@
 class Solution {
     public int missingNumber(int[] nums) {
+
         sort(nums, nums.length);
         System.out.println(Arrays.toString(nums));
         for(int i = 0; i<nums.length; i++){
@@ -9,6 +10,7 @@ class Solution {
     }
 
     public void sort(int[] arr, int n){
+        //Cycle Sort
         int i = 0; 
         while(i<n){
             int j = arr[i];
