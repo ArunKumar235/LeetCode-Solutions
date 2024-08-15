@@ -13,7 +13,6 @@ class Solution {
                 i++;
             }
         }
-        System.out.println(Arrays.toString(nums));
         for(int k = 0 ; k<nums.length; k++){
             if(nums[k]!=k+1) return k+1;
         }
