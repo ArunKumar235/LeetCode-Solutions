@@ -2,12 +2,10 @@ class Solution {
     public int missingNumber(int[] nums) {
         sort(nums, nums.length);
         System.out.println(Arrays.toString(nums));
-        int i = 0;
-        for(int a: nums){
-            if(a!=i) return i;
-            i++;
+        for(int i = 0; i<nums.length; i++){
+            if(nums[i]!=i) return i;
         }
-        return i;
+        return nums.length;
     }
 
     public void sort(int[] arr, int n){
