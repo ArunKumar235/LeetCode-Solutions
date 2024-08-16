@@ -39,13 +39,13 @@ class MyLinkedList {
     public void addAtTail(int val) {
         if(head==null){
             head = new Node(val);
-        }else{
-            Node temp = head;
-            while(temp.next!=null){
-                temp = temp.next;
-            }
-            temp.next = new Node(val);
+            return;
         }
+        Node temp = head;
+        while(temp.next!=null){
+            temp = temp.next;
+        }
+        temp.next = new Node(val);
     }
     
     public void addAtIndex(int index, int val) {
