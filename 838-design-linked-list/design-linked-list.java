@@ -82,14 +82,6 @@ class MyLinkedList {
         if(temp==null || temp.next==null) return;
         temp.next = temp.next.next;
     }
-
-    public void printll(){
-        Node temp = head;
-        while(temp!= null){
-            System.out.println(temp.val);
-            temp = temp.next;
-        }
-    }
 }
 
 /**
