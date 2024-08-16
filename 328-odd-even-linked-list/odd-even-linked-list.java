@@ -15,12 +15,11 @@ class Solution {
         ListNode o = head;
         ListNode e = head.next;
         ListNode temp = e;
-        while((o!=null && o.next!=null) || (e!=null &&  e.next!=null)){
-            if(o.next!=null){
-                d = o;
-                o.next = o.next.next;
-                o = o.next;
-            }if(e.next!=null){
+        while(o!=null && o.next!=null){
+            d = o;
+            o.next = o.next.next;
+            o = o.next;
+            if(e.next!=null){
                 e.next = e.next.next;
                 e = e.next;
             }
