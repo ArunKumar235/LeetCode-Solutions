@@ -1,14 +1,18 @@
 class Solution {
-    public int rob(int[] nums) {
-        if (nums.length ==1){
-            return nums[0];
-        }
-        int ans[] = new int[nums.length];
-        ans[0] = nums[0];
-        ans[1] = Math.max(nums[0],nums[1]);
-        for(int i=2; i<nums.length; i++){
-            ans[i] = Math.max(ans[i-1],ans[i-2]+nums[i]);
-        }
-        return ans[ans.length - 1];
+    HashMap<Integer, Integer> memo = new HashMap<>();
+    
+    public int rob(int[] arr) {
+        return soln(0, arr);
+    }
+
+    public int soln(int i, int[] arr){
+        if(i>=arr.length) return 0;
+        if(memo.containsKey(i)) return memo.get(i);
+
+        int crob = arr[i] + soln(i+2, arr);
+        int nrob = soln(i+1, arr);
+        int result = Math.max(crob, nrob);
+        memo.put(i, result);
+        return result;
     }
 }
