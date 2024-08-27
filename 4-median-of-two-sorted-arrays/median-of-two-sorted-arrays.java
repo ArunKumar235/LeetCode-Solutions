@@ -1,48 +1,28 @@
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int n1 = nums1.length, n2 = nums2.length;
-        
-        // Ensure nums1 is the smaller array for simplicity
-        if (n1 > n2)
-            return findMedianSortedArrays(nums2, nums1);
-        
-        int n = n1 + n2;
-        int left = (n1 + n2 + 1) / 2; // Calculate the left partition size
-        int low = 0, high = n1;
-        
-        while (low <= high) {
-            int mid1 = (low + high) >> 1; // Calculate mid index for nums1
-            int mid2 = left - mid1; // Calculate mid index for nums2
-            
-            int l1 = Integer.MIN_VALUE, l2 = Integer.MIN_VALUE, r1 = Integer.MAX_VALUE, r2 = Integer.MAX_VALUE;
-            
-            // Determine values of l1, l2, r1, and r2
-            if (mid1 < n1)
-                r1 = nums1[mid1];
-            if (mid2 < n2)
-                r2 = nums2[mid2];
-            if (mid1 - 1 >= 0)
-                l1 = nums1[mid1 - 1];
-            if (mid2 - 1 >= 0)
-                l2 = nums2[mid2 - 1];
-            
-            if (l1 <= r2 && l2 <= r1) {
-                // The partition is correct, we found the median
-                if (n % 2 == 1)
-                    return Math.max(l1, l2);
-                else
-                    return ((double)(Math.max(l1, l2) + Math.min(r1, r2))) / 2.0;
-            }
-            else if (l1 > r2) {
-                // Move towards the left side of nums1
-                high = mid1 - 1;
-            }
-            else {
-                // Move towards the right side of nums1
-                low = mid1 + 1;
+        int arr[] = new int[(nums1.length + nums2.length)/2 + 1];
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        int a = arr.length;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while(i<n1 && j<n2 && k<a){
+            if(nums1[i] < nums2[j]){
+                arr[k++] = nums1[i++];
+            }else{
+                arr[k++] = nums2[j++];
             }
         }
-        
-        return 0; // If the code reaches here, the input arrays were not sorted.
+        while(i<n1 && k<a){
+            arr[k++] = nums1[i++];
+        }
+        while(j<n2 && k<a){
+            arr[k++] = nums2[j++];
+        }
+        if((n1+n2) % 2 == 0){
+            return (arr[a-1]+arr[a-2])/2.0;
+        }
+        return arr[arr.length-1];
     }
 }
