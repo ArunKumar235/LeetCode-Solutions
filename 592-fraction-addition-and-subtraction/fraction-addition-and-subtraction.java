@@ -62,8 +62,8 @@ class Solution {
         return str;
     }
     public static int helper(int a,int b) {
-        if (b==0)
+        if (b==0){
             return a;
-        return helper(b, a % b);
+        }return helper(b, a % b);
     }
 }
