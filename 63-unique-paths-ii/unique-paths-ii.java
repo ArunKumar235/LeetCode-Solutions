@@ -1,24 +1,36 @@
 class Solution {
-    private int c(int m,int n,int[][] dp,int[][] obstacleGrid){
-        if(m==0 || n==0 || obstacleGrid[m-1][n-1] == 1) return dp[m][n] = 0;
-        
-        if(m ==1 && n == 1)return 1;
-        if(dp[m][n]!=-1)return dp[m][n];
-        return dp[m][n] = c(m-1,n,dp,obstacleGrid) + c(m,n-1,dp,obstacleGrid);
-    }
-    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        if(obstacleGrid[0][0] == 1){
-            return 0;
+    public int uniquePathsWithObstacles(int[][] arr) {
+        int r = arr.length;
+        int c = arr[0].length;
+        boolean b = true;
+        if( r==0 || c==0 || arr[0][0]==1) return 0;
+        for(int i = 1; i<r; i++){
+            if(arr[i][0]==1){
+                arr[i][0] = -1;
+                b = false;
+            }else if (b) arr[i][0] = 1;
         }
-        int m = obstacleGrid.length;
-        int n = obstacleGrid[0].length;
-        int[][] dp = new int[m+1][n+1];
-        // Arrays.fill(dp,-1);
-        for(int i = 0;i<=m;i++){
-            for(int j = 0;j<=n;j++){
-                dp[i][j] = -1;
+        b = true;
+        for(int i = 1; i<c; i++){
+            if(arr[0][i]==1){
+                arr[0][i] = -1;
+                b = false;
+            }else if (b) arr[0][i] = 1;
+        }
+        arr[0][0] = 1;
+        for(int i = 1; i<r; i++){
+            for(int j = 1; j<c; j++){
+                if(arr[i][j]==1){
+                    arr[i][j] = -1;
+                    continue;
+                }
+                if(arr[i-1][j] != -1) arr[i][j] += arr[i-1][j];
+                if(arr[i][j-1] != -1) arr[i][j] += arr[i][j-1];
             }
         }
-        return c(m,n,dp,obstacleGrid);
+        // for(int[] i: arr){
+        //     System.out.println(Arrays.toString(i));
+        // }
+        return arr[r-1][c-1] == -1 ? 0 : arr[r-1][c-1];
     }
 }
