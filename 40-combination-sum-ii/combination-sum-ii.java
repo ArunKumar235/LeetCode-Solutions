@@ -1,11 +1,13 @@
 class Solution {
+
+    List < List < Integer >> ans = new ArrayList < > ();
+    
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List < List < Integer >> ans = new ArrayList < > ();
         Arrays.sort(candidates);
-        findCombinations(0, candidates, target, ans, new ArrayList < > ());
+        findCombinations(0, candidates, target, new ArrayList < > ());
         return ans;
     }
-    static void findCombinations(int ind, int[] arr, int target, List < List < Integer >> ans, List < Integer > ds) {
+    public void findCombinations(int ind, int[] arr, int target, List < Integer > ds) {
         if (target == 0) {
             ans.add(new ArrayList < > (ds));
             return;
@@ -16,7 +18,7 @@ class Solution {
             if (arr[i] > target) break;
 
             ds.add(arr[i]);
-            findCombinations(i + 1, arr, target - arr[i], ans, ds);
+            findCombinations(i + 1, arr, target - arr[i], ds);
             ds.remove(ds.size() - 1);
         }
     }
