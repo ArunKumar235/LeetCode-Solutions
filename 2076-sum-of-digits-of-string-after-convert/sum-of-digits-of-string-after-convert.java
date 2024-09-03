@@ -1,26 +1,22 @@
 class Solution {
-
     public int getLucky(String s, int k) {
-        // Convert the string to a number by summing digit values
-        int currentNumber = 0;
-        for (char ch : s.toCharArray()) {
-            int position = ch - 'a' + 1;
-            while (position > 0) {
-                currentNumber += position % 10;
-                position /= 10;
-            }
+        int sum = 0;
+        for(char ch: s.toCharArray()){
+            sum+=sums((int)ch - 'a' + 1);
         }
-
-        // Apply digit sum transformations k-1 times
-        for (int i = 1; i < k; ++i) {
-            int digitSum = 0;
-            while (currentNumber > 0) {
-                digitSum += currentNumber % 10;
-                currentNumber /= 10;
-            }
-            currentNumber = digitSum;
+        while(k>1){
+            sum = sums(sum);
+            k--;
         }
+        return sum;
+    }
 
-        return currentNumber;
+    public int sums (int n){
+        int s = 0;
+        while(n>0){
+            s+=n%10;
+            n/=10;
+        }
+        return s;
     }
 }
