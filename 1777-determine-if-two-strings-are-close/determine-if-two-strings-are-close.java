@@ -1,31 +1,26 @@
 class Solution {
     public boolean closeStrings(String word1, String word2) {
-        int[] freq1 = new int[26];
-        int[] freq2 = new int[26];
-
-        for (char ch : word1.toCharArray()) {
-            freq1[ch - 'a']++;
+        if(word1.length() != word2.length()){
+            return false;
         }
-
-        for (char ch : word2.toCharArray()) {
-            freq2[ch - 'a']++;
+        int[] arr1 = new int[26];
+        int[] arr2 = new int[26];
+        for(char c : word1.toCharArray()){
+            arr1[c - 'a']++;
         }
-
-        for (int i = 0; i < 26; i++) {
-            if ((freq1[i] == 0 && freq2[i] != 0) || (freq1[i] != 0 && freq2[i] == 0)) {
+        for(char c : word2.toCharArray()){
+            if(arr1[c - 'a'] == 0){
+                return false;
+            }
+            arr2[c - 'a']++;
+        }
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        for(int i = 0; i < 26; i++){
+            if(arr1[i] != arr2[i]){
                 return false;
             }
         }
-
-        Arrays.sort(freq1);
-        Arrays.sort(freq2);
-
-        for (int i = 0; i < 26; i++) {
-            if (freq1[i] != freq2[i]) {
-                return false;
-            }
-        }
-
         return true;
     }
 }
