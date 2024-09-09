@@ -16,16 +16,13 @@ class Solution {
         int bottom = m-1;
         int left = 0;
         int right = n-1;
-        for(int i = 0; i<m; i++){
-            Arrays.fill(mat[i], -1);    
-        }
         while(left<=right && top<=bottom){
             for(int i = left; i<=right; i++){
                 if(head!=null){
                     mat[top][i] = head.val;
                     head = head.next;
                 }else{
-                    break;
+                    mat[top][i] = -1;
                 } 
             }
             top++;
@@ -34,7 +31,7 @@ class Solution {
                     mat[i][right] = head.val;
                     head = head.next;
                 }else{
-                    break;
+                    mat[i][right] = -1;
                 }
             }
             right--;
@@ -44,7 +41,7 @@ class Solution {
                         mat[bottom][i] = head.val; 
                         head = head.next;   
                     }else{
-                        break;
+                        mat[bottom][i] = -1;
                     }
                 }
                 bottom--;
@@ -54,7 +51,7 @@ class Solution {
                         mat[i][left] = head.val; 
                         head = head.next;   
                     }else{
-                        break;
+                        mat[i][left] = -1;
                     }
                 }
                 left++;
