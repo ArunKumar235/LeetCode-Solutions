@@ -11,9 +11,6 @@ class Solution {
                 }
             }
         }
-        for(int[] i: matrix){
-            System.out.println(Arrays.toString(i));
-        }
         return matrix[matrix.length-1][matrix[0].length-1];
     }
 }
