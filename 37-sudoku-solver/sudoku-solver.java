@@ -1,67 +1,67 @@
 class Solution {
-    public void solveSudoku(char[][] board) {
-        // Start solving sudoku from the first cell
-        solve(board, 0, 0);
+    public static void solveSudoku(char[][] board) {
+        int[] rFlag = new int[9];
+        int[] cFlag = new int[9];
+        int[] smFlag = new int[9];
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                if(board[i][j]=='.') continue;
+                int val = board[i][j] - '0';
+                int smidx = (i/3)*3+(j/3);
+                rFlag[i] |= 1<<(val);
+                cFlag[j] |= 1<<(val);
+                smFlag[smidx] |= 1<<(val);
+            }
+        }
+//        for(int i = 0;  i<9; i++){
+//            System.out.println(Integer.toBinaryString(rFlag[i])+" "+Integer.toBinaryString(cFlag[i])+" "+Integer.toBinaryString(smFlag[i]));
+//        }
+        solve(board, rFlag, cFlag, smFlag);
     }
 
-    private boolean solve(char[][] board, int row, int col) {
-        // Base case: If row is equal to board length, entire board has been filled
-        if (row == board.length) {
+    public static boolean solve(char[][] board, int[] rFlag, int[] cFlag, int[] smFlag){
+        Cell toFill = getUnfilledCell(board);
+        if(toFill==null){
             return true;
         }
-        
-        // Move to next row when current row is fully filled
-        if (col == board[0].length) {
-            return solve(board, row + 1, 0);
-        }
-        
-        // Skip cells that are already filled
-        if (board[row][col] != '.') {
-            return solve(board, row, col + 1);
-        }
-        
-        // Try different numbers in current cell
-        for (char num = '1'; num <= '9'; num++) {
-            if (isValidPlacement(board, row, col, num)) {
-                board[row][col] = num; // Fill current cell with valid number
-                
-                // Move to next cell
-                if (solve(board, row, col + 1)) {
-                    return true;
+        int smidx = (toFill.row/3)*3 + toFill.col/3;
+        for(int dig = 1; dig<=9; dig++){
+            if((rFlag[toFill.row]&(1<<dig))==0){
+                if((cFlag[toFill.col]&(1<<dig))==0){
+                    if((smFlag[smidx]&(1<<dig))==0){
+                        board[toFill.row][toFill.col] = (char)('0'+dig);
+                        rFlag[toFill.row] |= (1<<dig);
+                        cFlag[toFill.col] |= (1<<dig);
+                        smFlag[smidx] |= (1<<dig);
+                        if(solve(board, rFlag, cFlag, smFlag)){
+                            return true;
+                        }
+                        board[toFill.row][toFill.col] = '.';
+                        rFlag[toFill.row] ^= (1<<dig);
+                        cFlag[toFill.col] ^= (1<<dig);
+                        smFlag[smidx] ^= (1<<dig);
+                    }
                 }
-                
-                // Backtrack to previous state if solution not found
-                board[row][col] = '.';
             }
         }
-        
-        // No valid solution found
         return false;
+
     }
-
-    private boolean isValidPlacement(char[][] board, int row, int col, char num) {
-        // Check if num is already in the same row, column or 3x3 subgrid
-        for (int i = 0; i < board.length; i++) {
-            // Check row
-            if (board[i][col] == num) {
-                return false;
-            }
-
-            // Check column
-            if (board[row][i] == num) {
-                return false;
-            }
- 
-            // Check 3x3 subgrid
-            int subgridRow = 3 * (row / 3) + i / 3; // Calculate row index of subgrid
-            int subgridCol = 3 * (col / 3) + i % 3; // Calculate column index of subgrid
- 
-            if (board[subgridRow][subgridCol] == num) {
-                return false;
+    public static Cell getUnfilledCell(char[][] board){
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                if(board[i][j]=='.') return new Cell(i,j);
             }
         }
+        return null;
+    }
+}
 
-        // Placement is valid
-        return true;
+
+class Cell {
+    int row, col;
+    public Cell(int row, int col){
+        this.row = row;
+        this.col = col;
     }
 }
