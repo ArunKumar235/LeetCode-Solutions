@@ -44,8 +44,7 @@ class Solution {
                 }
             }
         }
-        return false;
-
+        return false; // Sudoku is unsolvable
     }
     public static Cell getUnfilledCell(char[][] board){
         for(int i = 0; i<9; i++){
@@ -56,7 +55,6 @@ class Solution {
         return null;
     }
 }
-
 
 class Cell {
     int row, col;
