@@ -1,28 +1,46 @@
 class Solution {
+    
     public int maxPossibleScore(int[] start, int d) {
+
         Arrays.sort(start);
         int n = start.length;
+        int low = 0;
+        // int high = start[n-1] + d - start[0];
+        int high = Integer.MAX_VALUE;
+            
+        int ans = 0;
 
-        long left = 0, right = Long.MAX_VALUE;
-        while (left < right) {
-            long mid = (right + left + 1) / 2;
-            if (canChoose(start, d, mid)) {
-                left = mid;
+        while (low <= high) {
+
+            int mid = low + (high - low) / 2;
+
+            if (isPossible(start, d, mid)) {
+                ans = mid;
+                low = mid+1;
             } else {
-                right = mid - 1;
+                high = mid-1;
             }
         }
-        return (int) left;
+
+        return ans;
+
+        
     }
 
-    private static boolean canChoose(int[] start, int d, long minDiff) {
-        long chosen = start[0];
-        for (int i = 1; i < start.length; i++) {
-            if (chosen + minDiff > start[i] + d) {
-                return false;
+    public boolean isPossible(int[] start, int d, int diff) {
+
+            int curr = start[0];
+
+            for (int i = 1; i < start.length; i++) {
+                if ( (curr+diff) > start[i] + d) {
+                    return false;
+                }
+
+            curr = Math.max(start[i], curr + diff);
+
             }
-            chosen = Math.max(chosen + minDiff, start[i]);
-        }
-        return true;
+
+            return true;
     }
+   
 }
