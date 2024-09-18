@@ -3,7 +3,7 @@ class Solution {
         Arrays.sort(start);
         int n = start.length;
 
-        long left = 0, right = 2_000_000_000L;
+        long left = 0, right = Long.MAX_VALUE;
         while (left < right) {
             long mid = (right + left + 1) / 2;
             if (canChoose(start, d, mid)) {
