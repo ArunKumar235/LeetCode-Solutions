@@ -5,7 +5,6 @@ class Solution {
         Arrays.sort(start);
         int n = start.length;
         int low = 0;
-        // int high = start[n-1] + d - start[0];
         int high = Integer.MAX_VALUE;
             
         int ans = 0;
