@@ -1,5 +1,8 @@
 class Solution {
-
+    
+    int[] rowDiff = {-1, 0, 1,  0};
+    int[] colDiff = { 0, 1, 0, -1};
+        
     public int longestIncreasingPath(int[][] mat) {
         int R = mat.length;
         int C = mat[0].length;
@@ -13,13 +16,12 @@ class Solution {
         }
         return max;
     }
+    
     public int dfs(int[][] mat, int[][]dp, int row, int col, int R, int C){
         if(dp[row][col]!=0){
             return dp[row][col];
         }
         int max = 1;
-        int[] rowDiff = {-1, 0, 1,  0};
-        int[] colDiff = { 0, 1, 0, -1};
         for(int i = 0; i<4; i++){
             int cRow = row+rowDiff[i];
             int cCol = col+colDiff[i];
