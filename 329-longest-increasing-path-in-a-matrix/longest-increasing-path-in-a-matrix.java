@@ -6,15 +6,10 @@ class Solution {
         int R = mat.length;
         int C = mat[0].length;
         int[][] dp = new int[R][C];
+        int max = 1;
         for(int i = 0; i< R; i++){
             for(int j = 0; j< C; j++){
                 dp[i][j] = dfs(mat, dp, i, j, R, C);
-            }
-        }
-        int max = 1;
-        for(int i =0 ; i<R; i++){
-            System.out.println(Arrays.toString(dp[i]));
-            for(int j = 0; j<C; j++){
                 max = Math.max(max, dp[i][j]);
             }
         }
