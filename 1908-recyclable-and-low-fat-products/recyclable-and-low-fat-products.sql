@@ -1,2 +1,2 @@
 -- Write your PostgreSQL query statement below
-SELECT product_id FROM products WHERE low_fats='Y' AND recyclable='Y';
+SELECT product_id FROM products WHERE low_fats='Y' AND recyclable='Y'
