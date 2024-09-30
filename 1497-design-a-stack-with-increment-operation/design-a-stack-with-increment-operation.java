@@ -1,26 +1,23 @@
 class CustomStack {
-    
-    int maxSize;
-    int[] arr;
-    int index = -1;
+    int[] stack;
+    int top = -1;
     public CustomStack(int maxSize) {
-        this.maxSize = maxSize;
-        arr = new int[maxSize];
+        stack = new int[maxSize];
     }
     
     public void push(int x) {
-        if(index+1==maxSize) return;
-        arr[++index] = x;
+        if(top==stack.length - 1) return;
+        stack[++top] = x;
     }
     
     public int pop() {
-        if(index==-1) return -1;
-        return arr[index--];
+        if(top==-1) return -1;
+        return stack[top--];
     }
     
     public void increment(int k, int val) {
-        for(int idx = 0; idx<k && idx<=index; idx++){
-            arr[idx] += val;
+        for(int idx = 0; idx<k && idx<stack.length; idx++){
+            stack[idx] += val;
         }
     }
 }
