@@ -16,7 +16,6 @@ class Solution {
         for(int[] i: dp){
             int area = largestRectangleArea(i);
             maxArea = Math.max(maxArea, area);
-            System.out.println(Arrays.toString(i));
         }
         return maxArea;
     }
