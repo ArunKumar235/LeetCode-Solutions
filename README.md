@@ -2,4 +2,4 @@
 
 My daily LeetCode progress is updated here!!!
 
-The Journey starts from July 10th 2024.
+The Journey started on July 10th 2024.
