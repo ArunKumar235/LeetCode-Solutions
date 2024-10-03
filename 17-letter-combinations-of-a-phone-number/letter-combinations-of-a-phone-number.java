@@ -1,5 +1,8 @@
 class Solution {
     public List<String> letterCombinations(String digits) {
+        if(digits.isEmpty()){
+            return new ArrayList<>();
+        }
         HashMap<Character, String> map = new HashMap<>();
         map.put('2',"abc");
         map.put('3',"def");
@@ -10,27 +13,22 @@ class Solution {
         map.put('8',"tuv");
         map.put('9',"wxyz");
         List<String> result = new ArrayList<>();
-        if(digits.isEmpty()){
-            return result;
-        }
         StringBuilder sb = new StringBuilder();
-        solve(digits, 0, sb, result, map);
+        generateCombinations(digits, 0, sb, result, map);
         return result;
     }
 
-    public void solve(String digits, int index, StringBuilder sb, List<String> result, HashMap<Character, String> map){
-        if(index==digits.length()){
+    public void generateCombinations(String digits, int index, StringBuilder sb, List<String> result, HashMap<Character, String> map){
+        if(sb.length()==digits.length()){
             result.add(sb.toString());
-            return;
+            return ;
         }
-        char ch = digits.charAt(index);
-        String rep = map.get(ch);
-        for(int i = 0; i<rep.length(); i++){
-            sb.append(rep.charAt(i));
-            solve(digits, index+1, sb, result, map);
+        char d = digits.charAt(index);
+        String val = map.get(d);
+        for(int i = 0; i<val.length(); i++){
+            sb.append(val.charAt(i));
+            generateCombinations(digits, index+1, sb, result, map);
             sb.setLength(sb.length()-1);
         }
-
-
     }
 }
