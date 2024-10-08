@@ -18,12 +18,10 @@ class Solution {
         int[] colDiff = { 0, 1, 0, -1};
         grid[r][c] = '0';
         for(int i = 0; i<4; i++){
-            for(int j = 0; j<4; j++){
-                int rpos = r + rowDiff[i];
-                int cpos = c + colDiff[i];
-                if(rpos>=0 && rpos<grid.length && cpos>=0 && cpos<grid[0].length){
-                    if(grid[rpos][cpos]=='1') dfs(grid, rpos, cpos);
-                }
+            int rpos = r + rowDiff[i];
+            int cpos = c + colDiff[i];
+            if(rpos>=0 && rpos<grid.length && cpos>=0 && cpos<grid[0].length){
+                if(grid[rpos][cpos]=='1') dfs(grid, rpos, cpos);
             }
         }
     }
