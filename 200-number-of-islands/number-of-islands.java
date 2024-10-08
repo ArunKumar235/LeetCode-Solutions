@@ -21,7 +21,7 @@ class Solution {
             int rpos = r + rowDiff[i];
             int cpos = c + colDiff[i];
             if(rpos>=0 && rpos<grid.length && cpos>=0 && cpos<grid[0].length){
-                if(grid[rpos][cpos]=='1') dfs(grid, rpos, cpos);
+                dfs(grid, rpos, cpos);
             }
         }
     }
