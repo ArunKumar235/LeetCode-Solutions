@@ -8,52 +8,52 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode() {}
- *     ListNode(int val) { this.val = val; }
- *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- * }
- */
 class Solution {
-    public ListNode reverse(ListNode head ){
-        ListNode prev = null;
-        ListNode curr = head;
-        ListNode next = null;
+    public boolean isPalindrome(ListNode head) {
+        ListNode mid = middleNode(head);
+        ListNode headSecond = reverseList(mid);
+        ListNode rereverseHead = headSecond;
 
-        while(curr != null){
-            next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
+        // compare both the halves
+        while (head != null && headSecond != null) {
+            if (head.val != headSecond.val) {
+                break;
+            }
+            head = head.next;
+            headSecond = headSecond.next;
+        }
+        reverseList(rereverseHead);
+
+        return head == null || headSecond == null;
+    }
+
+    public ListNode middleNode(ListNode head) {
+        ListNode s = head;
+        ListNode f = head;
+
+        while (f != null && f.next != null) {
+            s = s.next;
+            f = f.next.next;
+        }
+        return s;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode prev = null;
+        ListNode present = head;
+        ListNode next = present.next;
+
+        while (present != null) {
+            present.next = prev;
+            prev = present;
+            present = next;
+            if (next != null) {
+                next = next.next;
+            }
         }
         return prev;
     }
-
-    public boolean isPalindrome(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
-
-        while(fast.next != null && fast.next.next != null){
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        ListNode temp = reverse(slow.next);
-        slow.next = temp;
-        ListNode p1 = head;
-        ListNode p2 = slow.next;
-
-        while(p2!=null){
-            if(p1.val != p2.val) return false;
-            p1 = p1.next;
-            p2 = p2.next;
-        }
-        return true;
-        
-    }
-    
 }
