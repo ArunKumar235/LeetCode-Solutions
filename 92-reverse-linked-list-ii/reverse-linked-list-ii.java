@@ -1,20 +1,48 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
 class Solution {
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        ListNode dummy = new ListNode(0); // created dummy node
-        dummy.next = head;
-        ListNode prev = dummy; // intialising prev pointer on dummy node
-        
-        for(int i = 0; i < left - 1; i++)
-            prev = prev.next; // adjusting the prev pointer on it's actual index
-        
-        ListNode curr = prev.next; // curr pointer will be just after prev
-        // reversing
-        for(int i = 0; i < right - left; i++){
-            ListNode forw = curr.next; // forw pointer will be after curr
-            curr.next = forw.next;
-            forw.next = prev.next;
-            prev.next = forw;
+        if (left == right) {
+            return head;
         }
-        return dummy.next;
+
+        // skip the first left-1 nodes
+        ListNode current = head;
+        ListNode prev = null;
+        for (int i = 0; current != null && i < left - 1; i++) {
+            prev = current;
+            current = current.next;
+        }
+
+        ListNode last = prev;
+        ListNode newEnd = current;
+
+        // reverse between left and right
+        ListNode next = current.next;
+        for (int i = 0; current != null && i < right - left + 1; i++) {
+            current.next = prev;
+            prev = current;
+            current = next;
+            if (next != null) {
+                next = next.next;
+            }
+        }
+
+        if (last != null) {
+            last.next = prev;
+        } else {
+            head = prev;
+        }
+
+        newEnd.next = current;
+        return head;
     }
 }
