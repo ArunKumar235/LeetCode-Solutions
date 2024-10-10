@@ -17,14 +17,12 @@ class Solution {
         // compare both the halves
         while (head != null && headSecond != null) {
             if (head.val != headSecond.val) {
-                break;
+                return false;
             }
             head = head.next;
             headSecond = headSecond.next;
         }
-        reverseList(rereverseHead);
-
-        return head == null || headSecond == null;
+        return true;
     }
 
     public ListNode middleNode(ListNode head) {
