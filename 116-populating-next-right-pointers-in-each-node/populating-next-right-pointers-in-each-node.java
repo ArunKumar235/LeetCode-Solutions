@@ -24,26 +24,15 @@ class Node {
 class Solution {
     public Node connect(Node root) {
         if(root==null) return root;
-        Queue<Node> q = new ArrayDeque<>();
-        q.add(root);
-        while(!q.isEmpty()){
-            int level = q.size();
-            Node prev = null;
-            for(int i = 0; i<level; i++){
-                Node curr = q.poll();
-                if(curr.left!=null){
-                    q.add(curr.left);
-                }
-                if(curr.right!=null){
-                    q.add(curr.right);
-                }
-                if(prev==null){
-                    prev = curr;
-                }else{
-                    prev.next = curr;
-                    prev = curr;
-                }
+        Node leftMost = root;
+        while(leftMost.left!=null){
+            Node travel = leftMost;
+            while(travel!=null){
+                travel.left.next = travel.right;
+                if(travel.next!=null) travel.right.next = travel.next.left;
+                travel = travel.next;
             }
+            leftMost = leftMost.left;
         }
         return root;
     }
