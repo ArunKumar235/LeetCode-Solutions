@@ -14,19 +14,18 @@
  * }
  */
 class Solution {
-        public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> list = new ArrayList<>();
         if(root==null){
             return list;
         }
         ArrayDeque<TreeNode> q = new ArrayDeque<>();
         q.add(root);
-        int level = 0;
+        boolean reverse = true;
         while(!q.isEmpty()){
-            level++;
             int levelSize = q.size();
             List<Integer> li = new ArrayList<>();
-            if(level%2==1){
+            if(reverse){
                 for(int i = 0; i<levelSize; i++){
                     TreeNode curr = q.removeFirst();
                     li.add(curr.val);
@@ -37,6 +36,7 @@ class Solution {
                         q.addLast(curr.right);
                     }
                 }
+                reverse = false;
             }else{
                 for(int i = 0; i<levelSize; i++){
                     TreeNode curr = q.removeLast();
@@ -48,9 +48,11 @@ class Solution {
                         q.addFirst(curr.left);
                     }
                 }
+                reverse = true;
             }
             list.add(li);
         }
         return list;
     }
+
 }
