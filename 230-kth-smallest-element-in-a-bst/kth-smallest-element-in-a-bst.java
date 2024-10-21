@@ -15,14 +15,20 @@
  */
 class Solution {
     int count = 0;
+    int result = 0;
     public int kthSmallest(TreeNode root, int k) {
-        if(root==null) return -1;
-        int left = kthSmallest(root.left, k);
-        if(left!=-1){
-            return left;
-        }
+        inorder(root, k);
+        return result;
+    }
+
+    public void inorder(TreeNode node,  int k){
+        if(node==null) return;
+        inorder(node.left, k);
         count++;
-        if(count==k) return root.val;
-        return kthSmallest(root.right, k);
+        if(count==k){
+            result = node.val;
+            return;
+        }
+        inorder(node.right, k);
     }
 }
