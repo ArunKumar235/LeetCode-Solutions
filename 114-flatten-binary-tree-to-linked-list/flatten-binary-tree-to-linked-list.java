@@ -14,23 +14,19 @@
  * }
  */
 class Solution {
-    
     public void flatten(TreeNode root) {
-        if(root==null) return;
-        preorder(root);
-        TreeNode travel = q.poll();
-        while(!q.isEmpty()){
-            travel.left = null;
-            travel.right = q.poll();
-            travel = travel.right;
+        TreeNode curr = root;
+        while(curr!=null){
+            if(curr.left!=null){
+                TreeNode travel = curr.left;
+                while(travel.right!=null){
+                    travel = travel.right;
+                }
+                travel.right = curr.right;
+                curr.right = curr.left;
+                curr.left = null;
+            }
+            curr = curr.right;
         }
-        
-    }
-    Queue<TreeNode> q = new ArrayDeque<>();
-    public void preorder(TreeNode node){
-        if(node==null) return;
-        q.add(node);
-        preorder(node.left);
-        preorder(node.right);
     }
 }
