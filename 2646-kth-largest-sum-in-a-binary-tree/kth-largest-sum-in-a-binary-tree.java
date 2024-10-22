@@ -28,12 +28,15 @@ class Solution {
                 if(curr.left != null) q.add(curr.left);
                 if(curr.right != null) q.add(curr.right);
             }
-            pq.add(sum);
+            if(pq.size()<k) pq.add(sum);
+            else{
+                if(pq.peek()<sum){
+                    pq.poll();
+                    pq.add(sum);
+                }
+            }
         }
         if(pq.size()<k) return -1;
-        while(pq.size()>k){
-            pq.poll();
-        } 
         return pq.poll();
     }
 }
