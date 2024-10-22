@@ -29,9 +29,11 @@ class Solution {
                 if(curr.right != null) q.add(curr.right);
             }
             pq.add(sum);
-            if(pq.size()>k) pq.poll();
         }
         if(pq.size()<k) return -1;
+        while(pq.size()>k){
+            pq.poll();
+        } 
         return pq.poll();
     }
 }
