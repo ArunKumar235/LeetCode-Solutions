@@ -22,7 +22,6 @@ class Solution {
 
     public void dfs(TreeNode node, List<Integer> li, int targetSum){
         if(node==null) return;
-        // System.out.println(node.val);
         if(node.val==targetSum && node.left==null && node.right==null){
             li.add(node.val);
             res.add(new ArrayList<>(li));
