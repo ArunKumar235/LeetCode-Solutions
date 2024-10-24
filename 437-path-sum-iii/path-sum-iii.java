@@ -14,45 +14,21 @@
  * }
  */
 class Solution {
-    // Map for keeping track of (PrefixSum, timesPrefixSumSeen) during traversal
-    Map<Long, Integer> hmap;
-    int count;
-
+    int count = 0;
     public int pathSum(TreeNode root, int targetSum) {
-        hmap = new HashMap<>();
-        count = 0;
-
-        dfs(root, 0, targetSum);
-
+        HashMap<Long, Integer> map = new HashMap<>();
+        dfs(root, 0, targetSum,map);
         return count;
     }
 
-    private void dfs(TreeNode root, long prefixSum, int targetSum) {
-        // base case
-        if (root == null) return;
-
-        
-        prefixSum += root.val;
-        
-        // If map contains a sum equal to (prefixSum - targetSum), we need to increment count that many times
-        if (hmap.containsKey(prefixSum-targetSum)) {
-            count += hmap.get(prefixSum-targetSum);
-        } 
-        
-        // There can be cases when the prefixSum is directly equal to targetSum, we need to increment count
-        if (targetSum == prefixSum) {
-            count++;
-        }
-
-        // Update the prefixSum till current node and it's count
-        hmap.put(prefixSum, hmap.getOrDefault(prefixSum, 0) + 1);
-
-        // Recurse
-        dfs(root.left, prefixSum, targetSum);
-        dfs(root.right, prefixSum, targetSum);
-
-        // Backtrack
-        hmap.put(prefixSum, hmap.get(prefixSum) - 1);
-        
+    public void dfs(TreeNode node, long prefixSum, int targetSum, HashMap<Long, Integer> map){
+        if(node==null) return;
+        prefixSum += node.val;
+        if(map.containsKey(prefixSum-targetSum)) count += map.get(prefixSum-targetSum);
+        if(prefixSum==targetSum) count++;
+        map.put(prefixSum, map.getOrDefault(prefixSum, 0)+1);
+        dfs(node.left, prefixSum, targetSum, map);
+        dfs(node.right, prefixSum, targetSum, map);
+        map.put(prefixSum, map.get(prefixSum)-1);
     }
 }
