@@ -14,22 +14,20 @@
  * }
  */
 class Solution {
-
     int maxLevel = 0;
-    
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
-        if(root==null) return list;
-        dfs(root,1,list);    
+        dfs(root, 1, list);
         return list;
     }
-
-    public void dfs(TreeNode node, int level, List<Integer> list){
+    public void dfs(TreeNode root, int level, List<Integer> list){
+        if(root==null) return;
         if(level>maxLevel){
-            list.add(node.val);
+            list.add(root.val);
             maxLevel = level;
         }
-        if(node.right!=null) dfs(node.right, level+1, list);
-        if(node.left!=null) dfs(node.left, level+1, list);
+        dfs(root.right, level+1, list);
+        dfs(root.left, level+1, list);
     }
+
 }
