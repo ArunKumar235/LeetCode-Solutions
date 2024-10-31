@@ -11,8 +11,10 @@ class Solution {
         if(freq[0] % 2 != 0){
             return false;
         }
-        for(int i = 1;i <= k / 2;i++){
-            if(freq[i] != freq[k-i]) {
+        int start = 1;
+        int end = k-1;
+        while(start<end){
+            if(freq[start++] != freq[end--]){
                 return false;
             }
         }
