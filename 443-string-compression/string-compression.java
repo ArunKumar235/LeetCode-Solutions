@@ -1,6 +1,6 @@
 class Solution {
     public int compress(char[] chars) {
-        StringBuilder sb = new StringBuilder("");
+        int resIdx = 0;
         int L = chars.length;
         int pos = 0;
         while(pos<L){
@@ -9,13 +9,13 @@ class Solution {
             while(pos+len<L && ch==chars[pos+len]){
                 len++;
             }
-            sb.append(ch);
-            if(len!=1) sb.append(len);
+            chars[resIdx++] = ch;
             pos+=len;
+            if(len==1) continue;
+            for(char c: String.valueOf(len).toCharArray()){
+                chars[resIdx++] = c;
+            }
         }
-        for(int i = 0; i<sb.length(); i++){
-            chars[i] = sb.charAt(i);
-        }
-        return sb.length();
+        return resIdx;
     }
 }
