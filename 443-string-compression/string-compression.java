@@ -1,6 +1,6 @@
 class Solution {
     public int compress(char[] chars) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("");
         int L = chars.length;
         int pos = 0;
         while(pos<L){
