@@ -1,24 +1,20 @@
 class Solution {
     public String compressedString(String word) {
-        if(word.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
-        int len = 1;
-        char prev = word.charAt(0);
-        for(int i = 1; i<word.length(); i++){
-            if(word.charAt(i)==prev){
+        int L = word.length();
+        int pos = 0;
+        while(pos<L){
+            int len = 0;
+            char ch = word.charAt(pos);
+            while(pos+len<L && ch==word.charAt(pos+len)){
+                len++;
                 if(len==9){
-                    sb.append(len).append(prev);
-                    len = 1;
-                }else{
-                    len++;
+                    break;
                 }
-            }else{
-                sb.append(len).append(prev);
-                len = 1;
-                prev = word.charAt(i);
             }
+            sb.append(len).append(ch);
+            pos+=len;
         }
-        sb.append(len).append(prev);
         return sb.toString();
     }
 }
