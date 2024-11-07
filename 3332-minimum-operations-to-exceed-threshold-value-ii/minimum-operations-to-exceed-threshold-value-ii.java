@@ -1,5 +1,3 @@
-import java.util.PriorityQueue;
-
 class Solution {
     public int minOperations(int[] nums, int k) {
         PriorityQueue<Long> heap = new PriorityQueue<>();
