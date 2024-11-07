@@ -1,21 +1,24 @@
+import java.util.PriorityQueue;
+
 class Solution {
     public int minOperations(int[] nums, int k) {
-        PriorityQueue<Long> pq = new PriorityQueue<>();
+        PriorityQueue<Long> heap = new PriorityQueue<>();
+        
         for (int num : nums) {
-            pq.add((long) num);
+            heap.offer((long) num);
         }
-
-        int count = 0;
-        while (pq.peek() < k && pq.size() > 1) {
-
-            long x = pq.poll();
-            long y = pq.poll();
-
-            count++;
-            long new_Num = x * 2 + y;
-            pq.add(new_Num);
-
+        
+        int ans = 0;
+        while (heap.peek() < k) {
+            long x = heap.poll();
+            long y = heap.poll();
+            
+            long new_value = Math.min(x, y) * 2 + Math.max(x, y);
+            
+            heap.offer(new_value);
+            ans++;
         }
-        return count;
+        
+        return ans;
     }
 }
