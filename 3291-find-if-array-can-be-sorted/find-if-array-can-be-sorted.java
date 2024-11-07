@@ -1,3 +1,4 @@
+
 class Solution {
     public boolean canSortArray(int[] nums) {
         int prevMax = Integer.MIN_VALUE;
@@ -10,12 +11,13 @@ class Solution {
                 currMax = Math.max(currMax, nums[i]);
                 currMin = Math.min(currMin, nums[i]);
             } else {
-                if (currMin < prevMax)
+                if (currMin < prevMax) {
                     return false;
+                }
                 prevMax = currMax;
                 setBits = Integer.bitCount(nums[i]);
-                currMin = nums[i];
                 currMax = nums[i];
+                currMin = nums[i];
             }
         }
         return currMin > prevMax;
