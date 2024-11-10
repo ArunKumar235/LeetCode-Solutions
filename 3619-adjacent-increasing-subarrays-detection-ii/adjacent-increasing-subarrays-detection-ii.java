@@ -7,7 +7,6 @@ class Solution {
         for (int i = n - 2; i >= 0; i--) {
             inc[i] = nums.get(i) < nums.get(i + 1) ? inc[i + 1] + 1 : 1;
         }
-        System.out.println(Arrays.toString(inc));
         int maxK = 0;
         int max = 0;
         for(int i = 0; i<n; i++){
