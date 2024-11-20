@@ -9,7 +9,6 @@ class Solution {
             return -1;
         }
         
-        // Sliding Window
         int res = Integer.MAX_VALUE;
         int l = 0;
         for (int r = 0; r < s.length(); r++) {
