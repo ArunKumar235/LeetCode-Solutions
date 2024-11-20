@@ -1,25 +1,32 @@
 class Solution {
     public int takeCharacters(String s, int k) {
-        int[] count = new int[3];
+        int[] totalCount = new int[3];
+        int[] windowCount = new int[3];
+        
         for (char c : s.toCharArray()) {
-            count[c - 'a']++;
+            totalCount[c - 'a']++;
         }
-        
-        if (Math.min(Math.min(count[0], count[1]), count[2]) < k) {
-            return -1;
+        for (int i = 0; i < 3; i++) {
+            if (totalCount[i] < k) return -1;
         }
+
+        int maxLength = 0;
+        int left = 0;
         
-        int res = Integer.MAX_VALUE;
-        int l = 0;
-        for (int r = 0; r < s.length(); r++) {
-            count[s.charAt(r) - 'a']--;
+        for (int right = 0; right < s.length(); right++) {
+            windowCount[s.charAt(right) - 'a']++;
+
+            while (left <= right && 
+                windowCount[s.charAt(right) - 'a'] > totalCount[s.charAt(right) - 'a']-k) {
+                
+                windowCount[s.charAt(left) - 'a']--;
+                left++;
             
-            while (Math.min(Math.min(count[0], count[1]), count[2]) < k) {
-                count[s.charAt(l) - 'a']++;
-                l++;
             }
-            res = Math.min(res, s.length() - (r - l + 1));
+            
+            maxLength = Math.max(maxLength, right - left + 1);
         }
-        return res;
+
+        return s.length() - maxLength;
     }
 }
