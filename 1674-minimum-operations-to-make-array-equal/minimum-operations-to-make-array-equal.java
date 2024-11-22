@@ -1,0 +1,13 @@
+class Solution {
+    public int minOperations(int n) {
+        int result = 0;
+        
+        if (n % 2 == 0) {
+            result = (n / 2) * (n / 2);
+        } else {
+            result = ((n - 1) / 2) * ((n + 1) / 2);
+        }
+        
+        return result;
+    }
+}
