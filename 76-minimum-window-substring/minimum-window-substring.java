@@ -15,7 +15,7 @@ class Solution {
         while(right<s.length()){
             char toAdd = s.charAt(right);
             if(map.containsKey(toAdd)) map.replace(toAdd, map.get(toAdd)-1);
-            if(map.getOrDefault(toAdd, 1)==0) count--;
+            if(map.containsKey(toAdd) && map.get(toAdd)==0) count--;
             while(count==0){
                 if(right-left+1 < minLength){
                     minLength = right-left+1;
