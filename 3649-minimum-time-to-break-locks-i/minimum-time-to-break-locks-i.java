@@ -27,7 +27,7 @@ class Solution {
         int time = 0;
 
         for(int s : curr){
-            time += Math.ceil(s/(1.0*x));
+            time += (s+x-1)/x;
             x += k;
         }
         return time;
