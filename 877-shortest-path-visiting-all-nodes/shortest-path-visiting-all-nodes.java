@@ -1,14 +1,14 @@
 class Solution {
     public static int shortestPathLength(int[][] graph) {
         int n = graph.length;
-        Set<String> set = new HashSet<>(); // track visited paths
+        boolean[][] visited = new boolean[n][1<<n];
         Queue<Node> q = new LinkedList<>(); // store current level
         int req = (1<<n) -1; // all nodes visited
 
         // initialize all the current nodes
         for(int i = 0; i<n; i++){
             int newTravel = 1<<i;
-            set.add(i+"_"+newTravel);
+            visited[i][newTravel] = true;
             q.add(new Node(i, newTravel));
         }
         // track steps
@@ -26,10 +26,9 @@ class Solution {
 
                 for(int newNode: graph[val]){
                     int newTravel = travel | (1<<newNode);
-                    String newState = newNode + "_" + newTravel;
-                    if(!set.contains(newState)){ // check if a path is already visited
-                       q.add(new Node(newNode, newTravel));
-                       set.add(newState);
+                    if(!visited[newNode][newTravel]){ // check if a path is already visited
+                        q.add(new Node(newNode, newTravel));
+                        visited[newNode][newTravel] = true;
                     }
                 }
             }
