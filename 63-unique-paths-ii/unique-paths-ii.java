@@ -1,36 +1,33 @@
 class Solution {
-    public int uniquePathsWithObstacles(int[][] arr) {
-        int r = arr.length;
-        int c = arr[0].length;
-        boolean b = true;
-        if( r==0 || c==0 || arr[0][0]==1) return 0;
-        for(int i = 1; i<r; i++){
-            if(arr[i][0]==1){
-                arr[i][0] = -1;
-                b = false;
-            }else if (b) arr[i][0] = 1;
-        }
-        b = true;
-        for(int i = 1; i<c; i++){
-            if(arr[0][i]==1){
-                arr[0][i] = -1;
-                b = false;
-            }else if (b) arr[0][i] = 1;
-        }
-        arr[0][0] = 1;
-        for(int i = 1; i<r; i++){
-            for(int j = 1; j<c; j++){
-                if(arr[i][j]==1){
-                    arr[i][j] = -1;
-                    continue;
-                }
-                if(arr[i-1][j] != -1) arr[i][j] += arr[i-1][j];
-                if(arr[i][j-1] != -1) arr[i][j] += arr[i][j-1];
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int r = obstacleGrid.length;
+        int c = obstacleGrid[0].length;
+        boolean blocked = false;
+        for(int i = 0; i<r; i++){
+            if(obstacleGrid[i][0]==1){
+                blocked = true;
             }
+            if(blocked) obstacleGrid[i][0]=1;
         }
-        // for(int[] i: arr){
-        //     System.out.println(Arrays.toString(i));
-        // }
-        return arr[r-1][c-1] == -1 ? 0 : arr[r-1][c-1];
+        blocked = false;
+        for(int i = 0; i<c; i++){
+            if(obstacleGrid[0][i]==1){
+                blocked = true;
+            }
+            if(blocked) obstacleGrid[0][i]=1;
+        }
+        int[][] dp = new int[r][c];
+        for(int i = 0; i<r; i++){
+            Arrays.fill(dp[i], -1);
+        }
+        return rec(obstacleGrid, r-1, c-1, dp);
+    }
+
+    private int rec(int[][] mat, int r, int c, int[][] dp){
+        if(dp[r][c] != -1) return dp[r][c];
+        if(mat[r][c]==1) return 0;
+        if(r==0 || c==0) return 1;
+
+        return dp[r][c] = rec(mat, r-1, c, dp) + rec(mat, r, c-1, dp);
     }
 }
