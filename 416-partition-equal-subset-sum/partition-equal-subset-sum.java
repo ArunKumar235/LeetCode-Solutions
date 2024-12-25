@@ -9,22 +9,25 @@ class Solution {
 
         if(totalSum %2 == 1) return false;
         int target = totalSum/2;
-        boolean[][] dp = new boolean[N][target +1];
-        for(int i = 0; i<N; i++){
-            dp[i][0] = true;
-        }
-        if(nums[0] <= target) dp[0][nums[0]] = true;
+        
+        boolean[] prev = new boolean[target+1];
+        
+        if(nums[0] <= target) prev[nums[0]] = true;
+        prev[0] = true;
 
         for(int idx = 1; idx<N; idx++){
+            boolean[] curr = new boolean[target+1];
+            curr[0] = true;
             for(int t = 1; t<=target; t++){
-                boolean notTake = dp[idx-1][t];
+                boolean notTake = prev[t];
                 boolean take = false;
-                if(nums[idx] <= t) take = dp[idx-1][t - nums[idx]];
+                if(nums[idx] <= t) take = prev[t - nums[idx]];
 
-                dp[idx][t] = take || notTake;
+                curr[t] = take || notTake;
             }
+            prev = curr;
         }
 
-        return dp[N-1][target];
+        return prev[target];
     }
 }
