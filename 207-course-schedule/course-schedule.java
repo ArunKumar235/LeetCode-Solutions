@@ -1,30 +1,38 @@
 class Solution {
-    public static boolean canFinish(int numCourses, int[][] prerequisites) {
-        if (numCourses <= 0)
-            return false;
-        Queue<Integer> queue = new LinkedList<>();
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] inDegree = new int[numCourses];
-        for (int i = 0; i < prerequisites.length; i++) {
-            inDegree[prerequisites[i][1]]++;
+        List<List<Integer>> graph = new ArrayList<>();
+        
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList<>());
         }
-        for (int i = 0; i < inDegree.length; i++) {
-            if (inDegree[i] == 0)
+
+        for (int[] prereq : prerequisites) {
+            int course = prereq[0];
+            int preCourse = prereq[1];
+            graph.get(preCourse).add(course);
+            inDegree[course]++;
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
                 queue.offer(i);
+            }
         }
+
+        int count = 0;
         while (!queue.isEmpty()) {
-            int x = queue.poll();
-            for (int i = 0; i < prerequisites.length; i++) {
-                if (x == prerequisites[i][0]) {
-                    inDegree[prerequisites[i][1]]--;
-                    if (inDegree[prerequisites[i][1]] == 0)
-                        queue.offer(prerequisites[i][1]);
+            int current = queue.poll();
+            count++;
+            for (int neighbor : graph.get(current)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.offer(neighbor);
                 }
             }
         }
-        for (int i = 0; i < inDegree.length; i++) {
-            if (inDegree[i] != 0)
-                return false;
-        }
-        return true;
+
+        return count == numCourses;
     }
 }
