@@ -1,9 +1,10 @@
 class Solution {
     public int subarraysWithKDistinct(int[] nums, int k) {
-        return helper(nums, k) - helper(nums, k - 1);
+        return helper(nums, k) - helper(nums, k - 1); // {<=K} - {<=(K-1)} -> {==K}
     }
 
-    private int helper(int[] nums, int k) {
+    // Returns the count of all subarrays with <=K unique elements
+    private int helper(int[] nums, int k) { 
         Map<Integer, Integer> map = new HashMap<>();
         int res = 0, l = 0;
 
@@ -16,7 +17,7 @@ class Solution {
                 }
                 l++;
             }
-            res += (r - l + 1);
+            res += (r - l + 1); // Count of subarrays ending at r, and starting anywhere from l to r
         }
         return res;
     }
