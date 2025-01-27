@@ -8,26 +8,26 @@ class Solution {
         }
 
         if(totalSum %2 == 1) return false;
-        int target = totalSum/2;
-        
-        boolean[] prev = new boolean[target+1];
-        
-        if(nums[0] <= target) prev[nums[0]] = true;
-        prev[0] = true;
 
-        for(int idx = 1; idx<N; idx++){
-            boolean[] curr = new boolean[target+1];
-            curr[0] = true;
-            for(int t = 1; t<=target; t++){
-                boolean notTake = prev[t];
-                boolean take = false;
-                if(nums[idx] <= t) take = prev[t - nums[idx]];
-
-                curr[t] = take || notTake;
-            }
-            prev = curr;
+        int[][] dp = new int[N][totalSum/2 +1];
+        for(int[] row: dp){
+            Arrays.fill(row, -1);
         }
 
-        return prev[target];
+        return rec(N-1, totalSum/2, nums, dp);
+    }
+
+    private boolean rec(int idx, int target, int[] nums, int[][] dp){
+        if(idx==0) return nums[0] == target;
+        if(target==0) return true;
+        if(dp[idx][target] != -1) return dp[idx][target] == 1;
+
+        boolean notTake = rec(idx-1, target, nums, dp);
+        boolean take = false;
+        if(nums[idx] <= target) take = rec(idx-1, target - nums[idx], nums, dp);
+
+        dp[idx][target] = (take || notTake) ? 1 : 0;
+
+        return dp[idx][target] == 1;
     }
 }
