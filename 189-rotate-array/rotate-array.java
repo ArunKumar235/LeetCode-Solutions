@@ -1,18 +1,19 @@
 class Solution {
     public void rotate(int[] nums, int k) {
-        k = k%nums.length;
-        flip(nums,0,nums.length-1);
-        flip(nums,k,nums.length-1);
-        flip(nums,0,k-1);
+        int n = nums.length;
+        k = k%n;
+        rotate(nums,0,n-1);
+        rotate(nums,0,k-1);
+        rotate(nums,k,n-1);
     }
 
-    public static void flip(int[] nums, int i, int j){
-        while(i<j){
-            int temp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = temp;
-            i++;
-            j--;
+    public void rotate(int[] nums, int start, int end){
+        while(start<end){
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
         }
     }
 }
