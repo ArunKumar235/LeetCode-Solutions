@@ -1,14 +1,13 @@
 class Solution {
     public int rob(int[] nums) {
-        if(nums.length==1) return nums[0];
-        int prev1 = Math.max(nums[0], nums[1]);
-        int prev2 = nums[0];
-        for(int i = 2; i<nums.length; i++){
-            int curr = Math.max(nums[i], prev1);
-            curr = Math.max(curr, prev2 + nums[i]);
-            prev2 = prev1;
-            prev1 = curr;
-        }
-        return prev1;
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, -1);
+        return rec(nums, nums.length-1, dp);
+    }
+
+    private int rec(int[] nums, int idx, int[] dp){
+        if(idx<0) return 0;
+        if(dp[idx]!=-1) return dp[idx];
+        return dp[idx] = Math.max(rec(nums, idx-1, dp), nums[idx]+rec(nums, idx-2, dp));
     }
 }
