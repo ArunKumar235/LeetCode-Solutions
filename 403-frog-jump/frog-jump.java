@@ -1,48 +1,45 @@
 class Solution {
     public boolean canCross(int[] stones) {
-        if(stones[1] - stones[0] != 1) return false;
-        
+
+        if(stones[1]-stones[0] != 1) return false;
+
         int N = stones.length;
         
         int[][] dp = new int[N][N];
-        
         for(int[] row: dp){
             Arrays.fill(row, -1);
         }
-        
-        HashMap<Integer, Integer> map = new HashMap<>();
-        
-        for(int i = 0; i<N; i++){
+        // 0 - stone
+        // 1 - water
+
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i<stones.length; i++){
             map.put(stones[i], i);
         }
 
-        return rec(1,1,stones,map,dp);
+        return rec(1, 1, stones, map, dp)==0;
     }
 
-    // i represent the current index and k represent the previous jump size
-    private boolean rec(int i, int k, int[] stones, HashMap<Integer, Integer> map, int[][] dp){
-        if(i==stones.length-1) return true;
-        if(dp[i][k] != -1) return dp[i][k]==1;
+    private int rec(int curr, int k, int[] arr, Map<Integer, Integer> map, int[][] dp){
+        if(curr==arr.length-1) return 0;
 
-        boolean kp = false, k0 = false, k1 = false;
+        if(dp[curr][k] != -1) return dp[curr][k];
 
-        // Jump K-1 steps only if there is a stone present over there
-        if(k>1 && map.containsKey(stones[i]+k-1)){
-            kp = rec(map.get(stones[i]+k-1), k-1, stones, map, dp);
+        int res = 1;
+        
+        if(map.containsKey(arr[curr]+k-1)){
+            if(k-1!=0) 
+            if(rec(map.get(arr[curr]+k-1), k-1, arr, map, dp)==0) res = 0;
         }
 
-        // Jump K steps only if there is a stone present over there
-        if(map.containsKey(stones[i]+k)){
-            k0 = rec(map.get(stones[i]+k), k, stones, map, dp);
+        if(map.containsKey(arr[curr]+k)){
+            if(rec(map.get(arr[curr]+k), k, arr, map, dp)==0) res = 0;
         }
 
-        // Jump K+1 steps only if there is a stone present over there
-        if(map.containsKey(stones[i]+k+1)){
-            k1 = rec(map.get(stones[i]+k+1), k+1, stones, map, dp);
+        if(map.containsKey(arr[curr]+k+1)){
+            if(rec(map.get(arr[curr]+k+1), k+1, arr, map, dp)==0) res = 0;
         }
 
-        dp[i][k] = (kp || k0 || k1) ? 1 : 0;
-
-        return dp[i][k] == 1;
+        return dp[curr][k] = res;
     }
 }
