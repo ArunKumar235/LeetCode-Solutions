@@ -5,22 +5,19 @@ class Solution {
         if(tsum%2==1) return false;
         int target = tsum/2;
 
-        int[][] dp = new int[nums.length][target+1];
-        for(int[] row: dp){
-            Arrays.fill(row, -1);
-        }                
+        boolean[][] dp = new boolean[nums.length][target+1];
+        for(int i = 0; i<nums.length; i++){
+            dp[i][0] = true;
+            if(nums[i]<=target) dp[i][nums[i]] = true;
+        }
 
-        return rec(nums.length-1, target, nums, dp);
-    }
+        for(int i = 1; i<nums.length; i++){
+            for(int t = 1; t<=target; t++){
+                dp[i][t] = dp[i-1][t];
+                if(t-nums[i] >=0) dp[i][t] = dp[i-1][t] || dp[i-1][t-nums[i]];
+            }
+        }
 
-    private boolean rec(int idx, int target, int[] nums, int[][] dp){
-        if(idx<0) return target==0;
-        if(target==0) return true;
-        if(target<0) return false;
-        if(dp[idx][target] != -1) return dp[idx][target]==1;
-
-        dp[idx][target] = (rec(idx-1,target,nums,dp) || rec(idx-1,target-nums[idx],nums,dp)) ? 1 : 0;
-
-        return dp[idx][target]==1;
+        return dp[nums.length-1][target];
     }
 }
