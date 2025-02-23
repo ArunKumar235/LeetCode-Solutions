@@ -1,27 +1,24 @@
 class Solution {
     public int coinChange(int[] coins, int amount) {
         int N = coins.length;
-        int[] prev = new int[amount+1];
         int[] curr = new int[amount+1];
         for(int t = 0; t<=amount; t++){
-            if(t%coins[0]==0) prev[t] = t/coins[0];
-            else prev[t] = (int)(1e9);
+            if(t%coins[0]==0) curr[t] = t/coins[0];
+            else curr[t] = (int)(1e9);
         }       
 
         for(int i = 1; i<N; i++){
             for(int t = 0; t<=amount; t++){
-                int notTake = prev[t];
+                int notTake = curr[t];
                 int take = (int)(1e9);
                 if(t-coins[i]>=0) take = 1+curr[t-coins[i]];
 
                 curr[t] = Math.min(take, notTake);
             }
-            prev = curr;
-            curr = new int[amount+1];
         }
 
-        if(prev[amount] >= (int)(1e9)) return -1;
-        return prev[amount];
+        if(curr[amount] >= (int)(1e9)) return -1;
+        return curr[amount];
     }
 
     // public int coinChange(int[] coins, int amount) {
