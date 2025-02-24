@@ -9,23 +9,26 @@ class Solution {
         
         // count subsets with sum k
 
-        int[][] dp = new int[nums.length][k+1];
+        int[] prev = new int[k+1];
+        int[] curr = new int[k+1];
 
-        if(nums[0]==0) dp[0][0] = 2;
-        else dp[0][0] = 1;
+        if(nums[0]==0) prev[0] = 2;
+        else prev[0] = 1;
 
-        if(nums[0]!=0 && nums[0]<=k) dp[0][nums[0]] = 1;
+        if(nums[0]!=0 && nums[0]<=k) prev[nums[0]] = 1;
 
         for(int i = 1; i<nums.length; i++){
             for(int j = 0; j<=k; j++){
-                int nottake = dp[i-1][j];
+                int nottake = prev[j];
                 int take = 0;
-                if(j-nums[i]>=0) take = dp[i-1][j-nums[i]];
+                if(j-nums[i]>=0) take = prev[j-nums[i]];
 
-                dp[i][j] = nottake+take;
+                curr[j] = nottake+take;
             }
+            prev = curr;
+            curr = new int[k+1];
         }
 
-        return dp[nums.length-1][k];
+        return prev[k];
     }
 }
