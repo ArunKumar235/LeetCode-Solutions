@@ -29,9 +29,9 @@ class Solution {
         if(dp[idx][target]!=-1) return dp[idx][target];
 
         int notpick = rec(idx-1, target, nums, dp);
-        int pick = Integer.MIN_VALUE; 
+        int pick = 0; 
         if(target-nums[idx]>=0) pick = rec(idx-1, target-nums[idx], nums, dp);
-        if(pick==Integer.MIN_VALUE) pick = 0;
+
         return dp[idx][target] = pick + notpick;
     }
 }
