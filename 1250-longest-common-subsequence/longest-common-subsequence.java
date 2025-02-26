@@ -1,16 +1,24 @@
 class Solution {
     public int longestCommonSubsequence(String text1, String text2) {
-        int[][] matrix = new int[text1.length()+1][text2.length()+1];
-        
-        for(int i = 1; i<=text1.length(); i++){
-            for(int j = 1; j<=text2.length(); j++){
-                if(text1.charAt(i-1)==text2.charAt(j-1)){
-                    matrix[i][j] = matrix[i-1][j-1]+1;
-                }else{
-                    matrix[i][j] = Math.max(matrix[i-1][j], matrix[i][j-1]);
-                }
-            }
+        int l1 = text1.length();
+        int l2 = text2.length();
+        int[][] dp = new int[l1][l2];
+        for(int[] row: dp) Arrays.fill(row, -1);
+        return rec(l1-1, l2-1, text1, text2, dp);
+    }
+
+    private int rec(int idx1, int idx2, String str1, String str2, int[][] dp){
+        if(idx1<0 || idx2<0){
+            return 0;
         }
-        return matrix[matrix.length-1][matrix[0].length-1];
+        if(dp[idx1][idx2]!=-1) return dp[idx1][idx2];
+        
+        if(str1.charAt(idx1)==str2.charAt(idx2)){
+            return dp[idx1][idx2] = 1 + rec(idx1-1, idx2-1, str1, str2, dp);
+        }
+        int move1 = rec(idx1-1, idx2, str1, str2, dp);
+        int move2 = rec(idx1, idx2-1, str1, str2, dp);
+
+        return dp[idx1][idx2] = Math.max(move1, move2);
     }
 }
