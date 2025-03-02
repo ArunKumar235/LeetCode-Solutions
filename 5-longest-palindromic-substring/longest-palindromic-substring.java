@@ -6,7 +6,6 @@ class Solution {
         Boolean palin[][] = new Boolean[N][N];
         for(int i = 0; i<N; i++){
             for(int j = i; j<N; j++){
-                if(j-i+1<maxLen) continue;
                 if(isPalin(s, i, j, palin)){
                     if(j-i+1>maxLen){
                         maxLen = j-i+1;
