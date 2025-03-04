@@ -10,7 +10,6 @@ class Solution {
     private void rec(int open, int close, int n, List<String> res, String str){
         if(open==n && close==n){
             res.add(str);
-            System.out.println(str);
             return;
         }
 
