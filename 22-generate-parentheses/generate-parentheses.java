@@ -1,22 +1,24 @@
 class Solution {
-    int n;
-    List<String> rec = new ArrayList<>();
     public List<String> generateParenthesis(int n) {
-        this.n = n;
-        generator(0,0,"");
-        return rec;
+        List<String> res = new ArrayList<>();
+
+        rec(0, 0, n, res, "");
+
+        return res;
     }
 
-    public void generator(int left, int right, String res){
-        if(res.length() == n+n){
-            rec.add(res);
+    private void rec(int open, int close, int n, List<String> res, String str){
+        if(open==n && close==n){
+            res.add(str);
+            System.out.println(str);
             return;
         }
-        if(left<n){
-            generator(left+1, right, res+"(");
-        }if(right<left){
-            generator(left, right+1, res+")");
-        }
 
+        if(open<n){
+            rec(open+1, close, n, res, str+"(" );
+        }
+        if(close<open){
+            rec(open,close+1, n, res, str+")");
+        }
     }
 }
