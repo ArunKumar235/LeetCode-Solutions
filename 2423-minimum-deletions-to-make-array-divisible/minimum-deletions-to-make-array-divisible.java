@@ -1,25 +1,14 @@
 class Solution {
     public int minOperations(int[] nums, int[] numsDivide) {
-        Set<Integer> set = new HashSet<>();
-        for(int num: numsDivide){
-            set.add(num);
-        }
         int gcd = numsDivide[0];
-        for(int num: set){
+        for(int num: numsDivide){
             gcd = findGCD(gcd, num);
         }
-        int min = Integer.MAX_VALUE;
+        Arrays.sort(nums);
         for(int i = 0; i<nums.length; i++){
-            if(gcd%nums[i]==0) min = Math.min(min, nums[i]);
-        }   
-        if(min==Integer.MAX_VALUE) return -1;
-        int res = 0;
-        for(int num: nums){
-            if(num<min){
-                res++;
-            }
+            if(gcd%nums[i]==0) return i;
         }
-        return res;
+        return -1;
     }
 
     private int findGCD(int a, int b){
