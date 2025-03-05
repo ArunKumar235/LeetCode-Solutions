@@ -8,11 +8,18 @@ class Solution {
         for(int num: set){
             gcd = findGCD(gcd, num);
         }
-        Arrays.sort(nums);
+        int min = Integer.MAX_VALUE;
         for(int i = 0; i<nums.length; i++){
-            if(gcd%nums[i]==0) return i;
+            if(gcd%nums[i]==0) min = Math.min(min, nums[i]);
         }   
-        return -1;
+        if(min==Integer.MAX_VALUE) return -1;
+        int res = 0;
+        for(int num: nums){
+            if(num<min){
+                res++;
+            }
+        }
+        return res;
     }
 
     private int findGCD(int a, int b){
