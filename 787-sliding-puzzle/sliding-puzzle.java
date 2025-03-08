@@ -1,68 +1,61 @@
 class Solution {
     public int slidingPuzzle(int[][] board) {
-        StringBuilder start = new StringBuilder();
-        String target = "123450";  
-
-        int R = 2, C = 3;  
-
-        for (int row = 0; row < R; row++) {
-            for (int col = 0; col < C; col++) {
-                start.append(board[row][col]);
+        String start = "";
+        int R = 2;
+        int C = 3;
+        for(int i = 0; i<R; i++){
+            for(int j = 0; j<C; j++){
+                start += board[i][j];
             }
         }
+        String target = "123450";
 
+        if(start.equals(target)) return 0;
+
+        Queue<String> q = new LinkedList<>();
+        q.offer(start);
         
-        int[][] swaparr = {
-            {1, 3},    
-            {0, 2, 4}, 
-            {1, 5},    
-            {0, 4},
-            {3, 1, 5}, 
-            {4, 2}     
+        Set<String> visited = new HashSet<>();
+        visited.add(start);
+
+        int moves = 1;
+
+        int[][] swaparr = new int[][]{
+            {1,3},
+            {0,2,4},
+            {1,5},
+            {0,4},
+            {1,3,5},
+            {2,4}
         };
 
-        Queue<String> queue = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
-        
-        queue.add(start.toString());
-        visited.add(start.toString());
+        while(!q.isEmpty()){
+            int qsize = q.size();
 
-        int swaps = 0;  
+            while(qsize-->0){
+                String str = q.poll();
+                int idx = str.indexOf("0");
 
-        while (!queue.isEmpty()) {
-            int qsize = queue.size();
-
-            for (int i = 0; i < qsize; i++) {
-                String str = queue.poll();
-
-                if (str.equals(target)) {
-                    return swaps;  
-                }
-
-                int zeroIdx = str.indexOf('0');  
-
-                for (int swapIdx : swaparr[zeroIdx]) {
-                    String swappedStr = swap(str, zeroIdx, swapIdx);
-                    
-                    if (!visited.contains(swappedStr)) {
-                        queue.add(swappedStr);
+                for(int val: swaparr[idx]){
+                    String swappedStr = swap(str.toString(), idx, val);
+                    if(!visited.contains(swappedStr)) {
+                        q.offer(swappedStr);
                         visited.add(swappedStr);
                     }
+                    if(swappedStr.equals(target)) return moves;
                 }
             }
-
-            swaps++;  
+            moves++;
         }
-
-        return -1;  
+        return -1;
     }
 
-    
-    private String swap(String str, int x, int y) {
+    private String swap(String str, int i, int j){
         char[] arr = str.toCharArray();
-        char temp = arr[x];
-        arr[x] = arr[y];
-        arr[y] = temp;
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+
         return new String(arr);
     }
 }
