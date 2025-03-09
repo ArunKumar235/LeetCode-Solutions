@@ -1,36 +1,31 @@
 class Solution {
     public boolean isInterleave(String s1, String s2, String s3) {
-        if(s1.length()+s2.length()!=s3.length()) return false;
-        int[][][] memo = new int[s1.length()][s2.length()][s3.length()];
-        return rec(0,0,0,s1,s2,s3, memo);    
+        if (s1.length() + s2.length() != s3.length()) return false;
+        if (s3.length() == 0) return true;
+
+        int m = s1.length();
+        int n = s2.length();
+        boolean[][] memo = new boolean[m + 1][n + 1];
+
+        memo[0][0] = true;
+
+        for (int i = 1; i <= m; i++) {
+            memo[i][0] = memo[i - 1][0] && s1.charAt(i - 1) == s3.charAt(i - 1);
+        }
+
+        for (int j = 1; j <= n; j++) {
+            memo[0][j] = memo[0][j - 1] && s2.charAt(j - 1) == s3.charAt(j - 1);
+        }
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                int k = i + j - 1;
+                memo[i][j] = (memo[i - 1][j] && s1.charAt(i - 1) == s3.charAt(k)) ||
+                            (memo[i][j - 1] && s2.charAt(j - 1) == s3.charAt(k));
+            }
+        }
+
+        return memo[m][n];
     }
 
-    private boolean rec(int i, int j, int k, String s1, String s2, String s3, int[][][] memo){
-        if(k==s3.length()) return true;
-        if(i==s1.length()) return s2.substring(j).equals(s3.substring(k));
-        if(j==s2.length()) return s1.substring(i).equals(s3.substring(k));
-
-        if(memo[i][j][k]!= 0) return (memo[i][j][k]==1) ? true : false;
-
-        if(s1.charAt(i)==s3.charAt(k) && s2.charAt(j)==s3.charAt(k)) {
-            if(rec(i+1, j, k+1, s1, s2, s3, memo) || rec(i, j+1, k+1, s1, s2, s3, memo)){
-                memo[i][j][k] = 1;
-                return true;
-            }
-        }
-        if(s1.charAt(i)==s3.charAt(k)){
-            if(rec(i+1, j, k+1, s1, s2, s3, memo)){
-                memo[i][j][k] = 1;
-                return true;
-            }
-        }
-        if(s2.charAt(j)==s3.charAt(k)) {
-            if(rec(i, j+1, k+1, s1, s2, s3, memo)){
-                memo[i][j][k] = 1;
-                return true;
-            }
-        }
-        memo[i][j][k] = -1;
-        return false;
-    }
 }
