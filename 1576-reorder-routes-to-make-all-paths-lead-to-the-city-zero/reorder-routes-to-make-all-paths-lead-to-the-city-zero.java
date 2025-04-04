@@ -1,4 +1,7 @@
 class Solution {
+
+    int count = 0;
+
     public int minReorder(int n, int[][] connections) {
         Map<Integer, List<Edge>> adj = new HashMap<>();
 
@@ -6,31 +9,20 @@ class Solution {
             adj.computeIfAbsent(arr[0], k -> new ArrayList<Edge>()).add(new Edge(arr[1], 1));
             adj.computeIfAbsent(arr[1], k -> new ArrayList<Edge>()).add(new Edge(arr[0], 0));
         }
-        return bfs(0, n, adj);
-    }
-
-    private int bfs(int node, int n, Map<Integer, List<Edge>> adj){
-        int count = 0;
-        boolean[] visited = new boolean[n];
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(node);
-        visited[node] = true;
-
-        while(!q.isEmpty()){
-            int curr = q.poll();
-            if(!adj.containsKey(curr)){
-                continue;
-            }
-            for(Edge e: adj.get(curr)){
-                if(!visited[e.node]){
-                    visited[e.node] = true;
-                    q.offer(e.node);
-                    count += e.weight;
-                }
-            }
-        }
+        dfs(0, -1, adj);
 
         return count;
+    }
+
+    private void dfs(int node, int parent, Map<Integer, List<Edge>> adj){
+        if(!adj.containsKey(node)) return;
+
+        for(Edge e: adj.get(node)){
+            if(e.node != parent){
+                count += e.weight;
+                dfs(e.node, node, adj);
+            }
+        }
     }
 }
 
