@@ -22,6 +22,9 @@ class Solution {
             curr = new boolean[target+1];
         }
 
+        // for(int i = 0; i<=target; i++){
+        //     System.out.println(i+ " " +prev[i]);
+        // }
         return prev[target];
     }
 }
