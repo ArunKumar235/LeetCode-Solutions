@@ -9,15 +9,9 @@ class Solution {
             merge(merge(c, b), a)
         };
 
-        String result = permutations[0];
-        for (String s : permutations) {
-            if (s.length() < result.length() || 
-                (s.length() == result.length() && s.compareTo(result) < 0)) {
-                result = s;
-            }
-        }
-        
-        return result;
+        Arrays.sort(permutations, (x,y) -> x.length()!=y.length() ? x.length()-y.length() : x.compareTo(y));
+
+        return permutations[0];
     }
 
     private String merge(String a, String b) {
