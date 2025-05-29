@@ -3,22 +3,23 @@ class Solution {
         int l1 = s.length();
         int l2 = p.length();
 
-        boolean[][] dp = new boolean[l1+1][l2+1];
+        boolean[] prev = new boolean[l2+1];
+        boolean[] curr = new boolean[l2+1];
 
-        dp[0][0] = true;
+        prev[0] = true;
 
-        for(int j = 1; j<=l2; j++) if(p.charAt(j-1)=='*') dp[0][j] = dp[0][j-1];
+        for(int j = 1; j<=l2; j++) if(p.charAt(j-1)=='*') prev[j] = prev[j-1];
 
         for(int i = 1; i<=l1; i++){
             for(int j = 1; j<=l2; j++){
-                if(s.charAt(i-1)==p.charAt(j-1) || p.charAt(j-1)=='?') dp[i][j] = dp[i-1][j-1];
+                if(s.charAt(i-1)==p.charAt(j-1) || p.charAt(j-1)=='?') curr[j] = prev[j-1];
 
-                else if(p.charAt(j-1)=='*') dp[i][j] = dp[i-1][j] || dp[i][j-1];
+                else if(p.charAt(j-1)=='*') curr[j] = prev[j] || curr[j-1];
 
-                else dp[i][j] = false;
+                else curr[j] = false;
             }
+            prev = curr.clone();
         }
-
-        return dp[l1][l2];
+        return prev[l2];
     }
 }
