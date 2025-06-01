@@ -1,27 +1,33 @@
 class Solution {
     public String shortestPalindrome(String s) {
-        return helper(s);
+        int[] lps = computeLPS(s+"#"+new StringBuilder(s).reverse().toString());
+
+        String rem = s.substring(lps[lps.length-1]);
+
+        return new StringBuilder(rem).reverse().toString() + s;
     }
 
-    public String helper(String s) {
-        int left = 0;
-        int right = s.length() - 1;
-        // Finding longest common palindromic subsequence, 
-        // among the string and reverse of that string
-        // aacecaaa
-        // aaacecaa => aacecaa | a => a | aacecaa | a
-        while (left < s.length() && right >= 0) {
-            while (right >= 0 && s.charAt(left) != s.charAt(right)) {
-                right--;
+
+    private int[] computeLPS(String pattern){
+        int[] lps = new int[pattern.length()];
+
+        int i = 1;
+        int len = 0;
+        while(i<pattern.length()){
+            if(pattern.charAt(i)==pattern.charAt(len)){
+                len++;
+                lps[i] = len;
+                i++;
+            }else{
+                if(len!=0){
+                    len = lps[len-1];
+                }else{
+                    lps[i] = 0;
+                    i++;
+                }
             }
-            left++;
-            right--;
         }
-        if (left == s.length()) {
-            return s;
-        } else {
-            String sub = s.substring(left);
-            return new StringBuilder(sub).reverse().toString() + helper(s.substring(0, left)) + sub;
-        }
+        return lps;
+
     }
 }
