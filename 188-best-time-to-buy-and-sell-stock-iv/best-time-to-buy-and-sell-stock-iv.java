@@ -1,30 +1,31 @@
 class Solution {
+    int trans;
     public int maxProfit(int K, int[] prices) {
-        int n = prices.length;
+        trans = 2*K;
+        int[][] memo = new int[prices.length][trans];
+        for(int[] arr: memo){
+            Arrays.fill(arr, -1);
+        }
+        return func(0, 0, prices, memo);
+    }
+    private int func(int idx, int op, int[] arr, int[][] memo){
+        if(idx==arr.length || op==trans) return 0;
+
+        if(memo[idx][op] != -1) return memo[idx][op];
         
-        int[][] curr = new int[2][K+1];
-        int[][] after = new int[2][K+1];
+        if(op%2==0){
+            int buy = -arr[idx] + func(idx+1, op+1, arr, memo);
+            int skip = func(idx+1, op, arr, memo);
 
-        for(int i = n-1; i>=0; i--){
-            for(int k = 0; k<=K; k++){
-                if(k==0){
-                    curr[0][0] = after[0][0];
-                    curr[1][0] = after[1][0];
-                }else{
-                    int buy = -prices[i] + after[1][k];
-                    int skip1 = after[0][k];
-                    
-                    curr[0][k] = Math.max(buy, skip1);
+            memo[idx][op] = Math.max(buy, skip);
+        
+        }else{
+            int sell = arr[idx] + func(idx+1, op+1, arr, memo);
+            int skip = func(idx+1, op, arr, memo);
 
-                    int sell = prices[i] + after[0][k-1];
-                    int skip2 = after[1][k];
-
-                    curr[1][k] = Math.max(sell, skip2);
-                }
-            }
-            after = curr.clone();
+            memo[idx][op] = Math.max(sell, skip);
         }
 
-        return after[0][K];
+        return memo[idx][op];
     }
 }
