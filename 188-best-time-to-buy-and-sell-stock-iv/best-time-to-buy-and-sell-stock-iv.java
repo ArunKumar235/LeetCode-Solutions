@@ -1,32 +1,27 @@
 class Solution {
-    public int maxProfit(int k, int[] prices) {
+    public int maxProfit(int K, int[] prices) {
         int n = prices.length;
-        int[][][] memo = new int[n][2][k+1];
-        for(int[][] mat: memo){
-            for(int[] arr: mat){
-                Arrays.fill(arr, -1);
+        int[][][] dp = new int[n+1][2][K+1];
+
+        for(int i = n-1; i>=0; i--){
+            for(int k = 0; k<=K; k++){
+                if(k==0){
+                    dp[i][0][0] = dp[i+1][0][0];
+                    dp[i][1][0] = dp[i+1][1][0];
+                }else{
+                    int buy = -prices[i] + dp[i+1][1][k];
+                    int skip1 = dp[i+1][0][k];
+                    
+                    dp[i][0][k] = Math.max(buy, skip1);
+
+                    int sell = prices[i] + dp[i+1][0][k-1];
+                    int skip2 = dp[i+1][1][k];
+
+                    dp[i][1][k] = Math.max(sell, skip2);
+                }
             }
         }
-        return func(0, 0, prices, k, memo);
-    }
-
-    private int func(int idx, int inHand, int[] arr, int opLeft, int[][][] memo){
-        if(idx==arr.length || opLeft==0) return 0;
-
-        if(memo[idx][inHand][opLeft] != -1) return memo[idx][inHand][opLeft];
         
-        if(inHand==0){
-            int buy = -arr[idx] + func(idx+1, 1, arr, opLeft, memo);
-            int skip = func(idx+1, 0, arr, opLeft, memo);
-
-            memo[idx][inHand][opLeft] = Math.max(buy, skip);
-        } 
-        else{
-            int sell = arr[idx] + func(idx+1, 0, arr, opLeft-1, memo);
-            int skip = func(idx+1, 1, arr, opLeft, memo);
-
-            memo[idx][inHand][opLeft] = Math.max(sell, skip);
-        }
-        return memo[idx][inHand][opLeft];
+        return dp[0][0][K];
     }
 }
