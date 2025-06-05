@@ -2,20 +2,24 @@ class Solution {
     public int maxProfit(int[] prices) {
         int n = prices.length;
 
-        int[][] dp = new int[n+1][2];
+        int netBuyProfit = 0;
+        int netSellProfit = 0;
 
         for(int i = n-1; i>=0; i--){
             
-            int buy = -prices[i] + dp[i+1][1];
-            int skip1 = dp[i+1][0];
-            dp[i][0] = Math.max(buy, skip1);
+            int buy = -prices[i] + netSellProfit;
+            int skip1 = netBuyProfit;
+            int currBuyProfit = Math.max(buy, skip1);
             
-            int sell = prices[i] + dp[i+1][0];
-            int skip2 = dp[i+1][1];
-            dp[i][1] = Math.max(sell, skip2);
+            int sell = prices[i] + netBuyProfit;
+            int skip2 = netSellProfit;
+            int currSellProfit = Math.max(sell, skip2);
             
+
+            netBuyProfit = currBuyProfit;
+            netSellProfit = currSellProfit;
         }
 
-        return dp[0][0];
+        return netBuyProfit;
     }
 }
