@@ -1,31 +1,21 @@
 class Solution {
     public int maxProfit(int[] prices) {
         int n = prices.length;
-        int[][] memo = new int[n][2];
-        for(int[] arr: memo){
-            Arrays.fill(arr, -1);
-        }
-        return func(0, 0, prices, memo);
-    }
 
-    private int func(int idx, int inHand, int[] arr, int[][] memo){
-        if(idx>=arr.length) return 0;
+        int[][] dp = new int[n+2][2];
+        for(int i = n-1; i>=0; i--){
+            
+            int buy = - prices[i] + dp[i+1][1];
+            int skip1 = dp[i+1][0];
 
-        if(memo[idx][inHand]!=-1) return memo[idx][inHand];
+            dp[i][0] = Math.max(buy, skip1);
 
-        if(inHand==0){
-            int buy = -arr[idx] + func(idx+1, 1, arr, memo);
-            int skip = func(idx+1, inHand, arr, memo);
+            int sell = prices[i] + dp[i+2][0];
+            int skip2 = dp[i+1][1];
 
-            memo[idx][inHand] = Math.max(buy, skip);
-        }
-        else{
-            int sell = arr[idx] + func(idx+2, 0, arr, memo);
-            int skip = func(idx+1, inHand, arr, memo);
-
-            memo[idx][inHand] = Math.max(sell, skip);
+            dp[i][1] = Math.max(sell, skip2);
         }
 
-        return memo[idx][inHand];
+        return dp[0][0];
     }
 }
