@@ -5,20 +5,20 @@ class Solution {
         for(int[] arr: memo){
             Arrays.fill(arr, -1);
         }
-        return func(0, 0, nums, memo);
+        return func(0, -1, nums, memo);
     }
 
-    private int func(int idx, int prev, int[] nums, int[][] memo){
-        if(idx==nums.length) return 0;
+    private int func(int i, int prev, int[] nums, int[][] memo){
+        if(i==nums.length) return 0;
+        if(memo[i][prev+1] != -1) return memo[i][prev+1];
 
-        if(memo[idx][prev]!=-1) return memo[idx][prev];
+        int dontTake = func(i+1, prev, nums, memo);
+        int take = 0;
 
-        int len = func(idx+1, prev, nums, memo);
+        if(prev == -1 || nums[prev]<nums[i]){
+            take = 1+ func(i+1, i, nums, memo);
+        }
 
-        if(prev==0 || nums[idx]>nums[prev-1]) {
-            len = Math.max(len, 1 + func(idx+1, idx+1, nums, memo));
-        } 
-
-        return memo[idx][prev] = len;
+        return memo[i][prev+1] = Math.max(take, dontTake);
     }
 }
