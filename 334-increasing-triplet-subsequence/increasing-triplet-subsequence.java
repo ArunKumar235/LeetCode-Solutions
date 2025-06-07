@@ -3,6 +3,7 @@ class Solution {
         int n = nums.length;
         List<Integer> li = new ArrayList<>();
         li.add(nums[0]);
+        
         for(int i = 1; i<n; i++){
             
             if(li.get(li.size()-1) < nums[i]){
