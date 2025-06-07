@@ -1,36 +1,34 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n];
-        int[] hash = new int[n];
-        Arrays.fill(dp, 1);
-        int res = 1;
-        for(int i = 1; i<n; i++){
-            hash[i] = i;
-            for(int j = 0; j<i; j++){
-                if(nums[j] < nums[i]){
-                    if(1+dp[j] > dp[i]) hash[i] = j;
-                    dp[i] = Math.max(dp[i], 1+dp[j]);
-                }
-            }
-            res = Math.max(res, dp[i]);
-        }
-
-        int start = -1;
-        for(int i = 0; i<n; i++){
-            if(dp[i]==res){
-                start = i;
-                break;
-            }
-        }
         List<Integer> li = new ArrayList<>();
-        while(hash[start]!=start){
-            li.add(nums[start]);
-            start = hash[start];
+        li.add(nums[0]);
+
+        for(int i = 1; i<nums.length; i++){
+            if(li.get(li.size()-1) < nums[i]){
+                li.add(nums[i]);
+            }else{
+                int idx = binarySearch(li, nums[i]);
+                li.set(idx, nums[i]);
+            }
         }
-        li.add(nums[start]);
-        Collections.reverse(li);
-        System.out.println(li);
-        return res;
+        return li.size();
+        
+    }
+
+    private int binarySearch(List<Integer> li, int val){
+        int start = 0;
+        int end = li.size()-1;
+        
+        while(start<=end){
+            int mid = start + (end-start)/2;
+            if(li.get(mid)==val){
+                return mid;
+            }else if(li.get(mid)<val){
+                start = mid+1;
+            }else{
+                end = mid-1;
+            }
+        }
+        return start;
     }
 }
