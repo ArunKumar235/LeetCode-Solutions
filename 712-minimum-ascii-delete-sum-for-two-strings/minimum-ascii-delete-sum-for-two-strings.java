@@ -2,27 +2,41 @@ class Solution {
     public int minimumDeleteSum(String s1, String s2) {
         int m = s1.length();
         int n = s2.length();
-        int[][] dp = new int[m+1][n+1];
-
-        for(int i = 1; i<=m; i++){
-            dp[i][0] = dp[i-1][0] + s1.charAt(i-1);
+        int[][] memo = new int[m+1][n+1];
+        for(int[] arr: memo){
+            Arrays.fill(arr, -1);
         }
+        return func(m, n, s1, s2, memo);
+    }
 
-        for(int j = 1; j<=n; j++){
-            dp[0][j] = dp[0][j-1] + s2.charAt(j-1);
-        }
-
-
-        for(int i = 1; i<=m; i++){
-            for(int j = 1; j<=n; j++){
-                if(s1.charAt(i-1)==s2.charAt(j-1)){
-                    dp[i][j] = dp[i-1][j-1];
-                }else{
-                    dp[i][j] = Math.min(dp[i-1][j]+s1.charAt(i-1), dp[i][j-1]+s2.charAt(j-1));
-                }
+    private int func(int i, int j, String s1, String s2, int[][] memo){
+        if(i==0 && j==0) return 0;
+        if(memo[i][j] != -1) return memo[i][j];
+        if(i==0){ 
+            int sum = 0;
+            while(j!=0){
+                sum += s2.charAt(j-1);
+                j--;
             }
+            return sum;
+        }
+        if(j==0){ 
+            int sum = 0;
+            while(i!=0){
+                sum += s1.charAt(i-1);
+                i--;
+            }
+            return sum;
         }
 
-        return dp[m][n];
+        if(s1.charAt(i-1)==s2.charAt(j-1)){
+            return memo[i][j] = func(i-1, j-1, s1, s2, memo);
+        }
+        else{
+            return memo[i][j] = Math.min(
+                func(i-1, j, s1, s2, memo) + s1.charAt(i-1), 
+                func(i, j-1, s1, s2, memo) + s2.charAt(j-1)
+            );
+        }
     }
 }
