@@ -24,6 +24,6 @@ class Solution {
         long dx = cell1[0]-cell2[0];
         long dy = cell1[1]-cell2[1];
         long range = cell1[2];
-        return (long) dx*dx + dy*dy <= (long) range*range;
+        return dx*dx + dy*dy <= range*range;
     }
 }
