@@ -1,48 +1,42 @@
-public class Solution {
+class Solution {
     public char[][] updateBoard(char[][] board, int[] click) {
-        int m = board.length, n = board[0].length;
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(click);
+        if(board == null || board.length == 0) return board;
+        int R = board.length;
+        int C = board[0].length;
         
-        while (!queue.isEmpty()) {
-            int[] cell = queue.poll();
-            int row = cell[0], col = cell[1];
-            
-            if (board[row][col] == 'M') { // Mine
-                board[row][col] = 'X';
-            }
-            else { // Empty
-                // Get number of mines first.
-                int count = 0;
-                for (int i = -1; i < 2; i++) {
-                    for (int j = -1; j < 2; j++) {
-                        if (i == 0 && j == 0) continue;
-                        int r = row + i, c = col + j;
-                        if (r < 0 || r >= m || c < 0 || c < 0 || c >= n) continue;
-                        if (board[r][c] == 'M' || board[r][c] == 'X') count++;
-                    }
-                }
-                
-                if (count > 0) { // If it is not a 'B', stop further BFS.
-                    board[row][col] = (char)(count + '0');
-                }
-                else { // Continue BFS to adjacent cells.
-                    board[row][col] = 'B';
-                    for (int i = -1; i < 2; i++) {
-                        for (int j = -1; j < 2; j++) {
-                            if (i == 0 && j == 0) continue;
-                            int r = row + i, c = col + j;
-                            if (r < 0 || r >= m || c < 0 || c < 0 || c >= n) continue;
-                            if (board[r][c] == 'E') {
-                                queue.add(new int[] {r, c});
-                                board[r][c] = 'B'; // Avoid to be added again.
-                            }
-                        }
-                    }
+        int x = click[0], y = click[1];
+        
+        if(board[x][y] == 'M'){
+            board[x][y] = 'X';
+            return board;
+        }
+        reveal(board, x, y, R, C);
+        return board;
+    }
+
+    private void reveal(char[][] board, int i, int j, int R, int C){
+        if(i < 0 || i >= R || j < 0 || j >= C || board[i][j] != 'E'){
+            return;
+        }
+        int mineCount = 0;
+        for(int x = -1; x<=1; x++){
+            for(int y = -1; y<=1; y++){
+                if(i+x>=0 && i+x<R && j+y>=0 && j+y<C && board[i+x][j+y]=='M'){
+                    mineCount++;
                 }
             }
         }
-        
-        return board;
+        if(mineCount > 0){
+            board[i][j] = (char) (mineCount + '0');
+            return;
+        }
+
+        board[i][j] = 'B';
+
+        for(int x = -1; x<=1; x++){
+            for(int y = -1; y<=1; y++){
+                reveal(board, i+x, j+y, R, C);
+            }
+        }
     }
 }
