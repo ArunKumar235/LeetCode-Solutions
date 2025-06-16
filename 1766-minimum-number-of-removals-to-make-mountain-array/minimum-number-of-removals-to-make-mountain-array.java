@@ -31,7 +31,7 @@ class Solution {
             if(lis[i] > 1 && lds[i] > 1){
                 minDelete = Math.min(
                     minDelete, 
-                    n-lis[i]-lds[i]+1
+                    n-(lis[i]+lds[i]-1)
                 );
             }
         }
