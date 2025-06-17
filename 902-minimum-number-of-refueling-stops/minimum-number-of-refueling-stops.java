@@ -3,13 +3,14 @@ class Solution {
         Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         int idx = 0;
         int res = 0;
-        for( res = 0; curr<target; res++){
-            while(idx<stations.length && stations[idx][0] <= curr){
+        while(curr<target){
+            while(idx<stations.length && stations[idx][0]<=curr){
                 pq.offer(stations[idx][1]);
                 idx++;
             }
-            if (pq.isEmpty()) return -1;
-            curr += pq.poll();
+            if(pq.isEmpty()) return -1;
+            curr+=pq.poll();
+            res++;
         }
         return res;
     }
