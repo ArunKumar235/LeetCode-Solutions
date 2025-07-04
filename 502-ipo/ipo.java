@@ -11,7 +11,7 @@ class Solution {
         PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         int i = 0;
         int n = profits.length;
-        
+
         while(k>0){
             while(i<n && li.get(i).capital<=w){
                 pq.offer(li.get(i).profit);
@@ -33,10 +33,5 @@ class Project{
     Project(int capital, int profit){
         this.capital = capital;
         this.profit = profit;
-    }
-
-    @Override
-    public String toString() {
-        return "capital: "+capital+" profit: "+profit;
     }
 }
