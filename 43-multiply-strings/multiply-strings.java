@@ -21,7 +21,6 @@ class Solution {
                 sb.append(digit);
             }
         }
-        System.out.println(Arrays.toString(result));
         return sb.length() == 0 ? "0" : sb.toString();
     }
 }
