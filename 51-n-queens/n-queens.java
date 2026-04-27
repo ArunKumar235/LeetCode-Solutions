@@ -1,53 +1,52 @@
 class Solution {
-    List<List<String>> result = new ArrayList<>();
-    boolean rowF[];
-    boolean colF[];
-    boolean trblF[];
-    boolean tlbrF[];
-    boolean board[][];
-    
     public List<List<String>> solveNQueens(int n) {
-        rowF = new boolean[n];
-        colF = new boolean[n];
-        tlbrF = new boolean[2*n -1];
-        trblF = new boolean[2*n -1];
-        board = new boolean[n][n];
-        fill(0,n);
-        return result;
+        boolean[][] board = new boolean[n][n];
+        boolean[] rowF = new boolean[n];
+        boolean[] colF = new boolean[n];
+        boolean[] tlbrF = new boolean[2*n -1];
+        boolean[] trblF = new boolean[2*n-1];
+
+        List<List<String>> res = new ArrayList<>();
+        
+        fill(0, n, board, rowF, colF, tlbrF, trblF, res);
+
+        return res;
     }
-    
-    public void fill(int row, int n){
-        if(row==n){
-            // To do
-            List<String> li = new ArrayList<>();
-            for(int r = 0; r <n; r++){
-                StringBuilder sb = new StringBuilder();
-                for(int c = 0; c<n; c++){
-                    sb.append((board[r][c]) ? "Q" : ".");
+
+    private void fill(int i, int n, boolean[][] board, boolean[] rowF, boolean[] colF, boolean[] tlbrF, boolean[] trblF, List<List<String>> res){
+        if(i==n){
+            List<String> curr = new ArrayList<>();
+            for(boolean[] arr: board){
+                StringBuilder sb = new StringBuilder("");
+                for(boolean val: arr){
+                    sb.append(val ? "Q" : ".");
                 }
-                li.add(sb.toString());
+                curr.add(sb.toString());
             }
-            result.add(li);
+            res.add(curr);
             return;
         }
+        for(int j = 0; j<n; j++){
+            if(!canplace(i,j,n,rowF,colF,tlbrF,trblF)) continue;
+            board[i][j]=true;
+            rowF[i]=true;
+            colF[j]=true;
+            tlbrF[i+j]=true;
+            trblF[n-1-(i-j)]=true;
+            
+            fill(i+1, n, board, rowF, colF, tlbrF, trblF, res);
 
-        for(int col = 0; col<n; col++){
-            if(!canPlace(row,col,n)) continue;
-            rowF[row] = true;
-            colF[col] = true;
-            trblF[row+col] = true;
-            tlbrF[n-1-(row-col)] = true;
-            board[row][col] = true;
-            fill(row+1, n);
-            rowF[row] = false;
-            colF[col] = false;
-            trblF[row+col] = false;
-            tlbrF[n-1-(row-col)] = false;
-            board[row][col] = false;
+            board[i][j]=false;
+            rowF[i]=false;
+            colF[j]=false;
+            tlbrF[i+j]=false;
+            trblF[n-1-(i-j)]=false;
         }
+        
     }
 
-    public boolean canPlace(int row, int col, int n){
-        return !(rowF[row] || colF[col] || trblF[row+col] || tlbrF[n-1-(row-col)] || board[row][col]);
+    private boolean canplace(int i, int j, int n, boolean[] rowF, boolean[] colF, boolean[] tlbrF, boolean[] trblF){
+        if(rowF[i] || colF[j] || tlbrF[i+j] || trblF[n-1-(i-j)]) return false;
+        return true;
     }
 }
