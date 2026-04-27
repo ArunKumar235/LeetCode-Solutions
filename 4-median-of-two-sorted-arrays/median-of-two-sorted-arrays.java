@@ -21,7 +21,7 @@ class Solution {
 
             if(l1 > r2){
                 h = m1-1;
-            }else if( l2 > r1){
+            }else if(l2 > r1){
                 l = m1+1;
             }else{
                 if((m+n) % 2==1) return Math.max(l1,l2);
