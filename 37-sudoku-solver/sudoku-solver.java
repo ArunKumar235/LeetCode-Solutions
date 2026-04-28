@@ -1,52 +1,52 @@
 class Solution {
-    public static void solveSudoku(char[][] board) {
-        int[] rFlag = new int[9];
-        int[] cFlag = new int[9];
-        int[] smFlag = new int[9];
+    public void solveSudoku(char[][] board) {
+        int[] rowF = new int[9];
+        int[] colF = new int[9];
+        int[] smF = new int[9];
+
         for(int i = 0; i<9; i++){
             for(int j = 0; j<9; j++){
                 if(board[i][j]=='.') continue;
                 int val = board[i][j] - '0';
-                int smidx = (i/3)*3+(j/3);
-                rFlag[i] |= 1<<(val);
-                cFlag[j] |= 1<<(val);
-                smFlag[smidx] |= 1<<(val);
+                int smidx = (i/3)*3 + (j/3);
+                rowF[i] |= 1<<(val);
+                colF[j] |= 1<<(val);
+                smF[smidx] |= 1<<(val);
             }
         }
-//        for(int i = 0;  i<9; i++){
-//            System.out.println(Integer.toBinaryString(rFlag[i])+" "+Integer.toBinaryString(cFlag[i])+" "+Integer.toBinaryString(smFlag[i]));
-//        }
-        solve(board, rFlag, cFlag, smFlag);
+
+        solve(board, rowF, colF, smF);
     }
 
-    public static boolean solve(char[][] board, int[] rFlag, int[] cFlag, int[] smFlag){
+    private boolean solve(char[][] board, int[] rowF, int[] colF, int[] smF ){
         Cell toFill = getUnfilledCell(board);
-        if(toFill==null){
-            return true;
-        }
-        int smidx = (toFill.row/3)*3 + toFill.col/3;
-        for(int dig = 1; dig<=9; dig++){
-            if((rFlag[toFill.row]&(1<<dig))==0){
-                if((cFlag[toFill.col]&(1<<dig))==0){
-                    if((smFlag[smidx]&(1<<dig))==0){
-                        board[toFill.row][toFill.col] = (char)('0'+dig);
-                        rFlag[toFill.row] |= (1<<dig);
-                        cFlag[toFill.col] |= (1<<dig);
-                        smFlag[smidx] |= (1<<dig);
-                        if(solve(board, rFlag, cFlag, smFlag)){
+        if(toFill==null) return true;
+        int row = toFill.row;
+        int col = toFill.col;
+        int smidx = (row/3)*3 + (col/3);
+        for(int val = 1; val<=9; val++){
+            if((rowF[row] & (1<<val)) == 0){
+                if((colF[col] & (1<<val)) == 0){
+                    if((smF[smidx] & (1<<val)) == 0){
+                        board[row][col] = (char)('0'+val);
+                        rowF[row] |= (1<<val);
+                        colF[col] |= (1<<val);
+                        smF[smidx] |= (1<<val);
+                        if(solve(board, rowF, colF, smF)){
                             return true;
                         }
-                        board[toFill.row][toFill.col] = '.';
-                        rFlag[toFill.row] ^= (1<<dig);
-                        cFlag[toFill.col] ^= (1<<dig);
-                        smFlag[smidx] ^= (1<<dig);
+                        board[row][col] = '.';
+                        rowF[row] ^= (1<<val);
+                        colF[col] ^= (1<<val);
+                        smF[smidx] ^= (1<<val); 
                     }
                 }
             }
         }
-        return false; // Sudoku is unsolvable
+        return false;
     }
-    public static Cell getUnfilledCell(char[][] board){
+
+    public Cell getUnfilledCell(char[][] board){
         for(int i = 0; i<9; i++){
             for(int j = 0; j<9; j++){
                 if(board[i][j]=='.') return new Cell(i,j);
@@ -54,12 +54,12 @@ class Solution {
         }
         return null;
     }
-}
 
-class Cell {
-    int row, col;
-    public Cell(int row, int col){
-        this.row = row;
-        this.col = col;
+    static class Cell{
+        int row, col;
+        public Cell(int i, int j){
+            row = i;
+            col = j;
+        }
     }
 }
