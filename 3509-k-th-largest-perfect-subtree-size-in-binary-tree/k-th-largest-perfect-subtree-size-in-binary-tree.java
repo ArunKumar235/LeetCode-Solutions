@@ -32,10 +32,9 @@ class Solution {
         int left = dfs(node.left, pq);
         int right = dfs(node.right, pq);
         
-        if(left == right && left >= 0) {
-            pq.offer(left + 1);
-            return left + 1;
-        }
-        return -1;
+        if(left==-1 || right==-1 || left != right) return -1;
+        
+        pq.offer(left+1);
+        return left+1;
     }
 }
