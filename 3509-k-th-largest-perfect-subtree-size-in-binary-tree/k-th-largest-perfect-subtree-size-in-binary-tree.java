@@ -23,33 +23,19 @@ class Solution {
         while (--k > 0) {
             pq.poll();
         }
-        return pq.peek();
+        return (1 << pq.peek()) -1;
     }
 
-    public Pair dfs(TreeNode node, PriorityQueue<Integer> pq){
-        if(node==null) return new Pair(0,0,true);;
+    public int dfs(TreeNode node, PriorityQueue<Integer> pq){
+        if(node==null) return 0;
 
-        Pair left = dfs(node.left, pq);
-        Pair right = dfs(node.right, pq);
+        int left = dfs(node.left, pq);
+        int right = dfs(node.right, pq);
         
-        if(left.perfect && right.perfect && left.height==right.height){
-            int size = left.size + right.size + 1;
-            pq.offer(size);
-            return new Pair(left.height+1,size,true);
+        if(left == right && left >= 0) {
+            pq.offer(left + 1);
+            return left + 1;
         }
-
-        return new Pair(0,0,false);
-    }
-}
-
-class Pair{
-    int height;
-    int size;
-    boolean perfect;
-
-    Pair(int h, int s, boolean p){
-        height = h;
-        size = s;
-        perfect = p;
+        return -1;
     }
 }
