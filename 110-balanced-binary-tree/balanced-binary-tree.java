@@ -22,10 +22,11 @@ class Solution {
         if(node==null) return 0;
 
         int left = height(node.left);
+        if(left==-1) return -1;
+
         int right = height(node.right);
-
-        if(left == -1 || right == -1) return -1;
-
+        if(right==-1) return -1;
+        
         if(Math.abs(left-right)>1) return -1;
 
         return Math.max(left, right)+1;
