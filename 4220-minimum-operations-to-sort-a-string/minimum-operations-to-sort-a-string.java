@@ -19,8 +19,7 @@ class Solution {
 
         for(int i = 1; i<arr.length-1; i++) if(arr[i]==min || arr[i]==max) return 2;
 
-        if(arr[0]==max && arr[arr.length-1]==min) return 3;
+        return 3;
 
-        return -2;
     }
 }
