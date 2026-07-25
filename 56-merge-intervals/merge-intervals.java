@@ -6,7 +6,7 @@ class Solution {
             return Integer.compare(a[1],b[1]);
         });
 
-        List<List<Integer>> res = new ArrayList<>();
+        List<int[]> res = new ArrayList<>();
         int prevStart = Integer.MIN_VALUE;
         int prevEnd = Integer.MIN_VALUE;
         for(int[] interval: intervals){
@@ -20,15 +20,13 @@ class Solution {
             if(prevEnd>=start){
                 prevEnd = Math.max(end, prevEnd);
             }else{
-                res.add(Arrays.asList(prevStart, prevEnd));
+                res.add(new int[]{prevStart, prevEnd});
                 prevStart = start;
                 prevEnd = end;
             }
         }
-        res.add(Arrays.asList(prevStart, prevEnd));
-        return res.stream()
-            .map(row -> row.stream()
-                .mapToInt(Integer::intValue).toArray())
-            .toArray(int[][]::new);
+        res.add(new int[]{prevStart, prevEnd});
+        
+        return res.toArray(int[][]::new);
     }
 }
