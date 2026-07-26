@@ -46,14 +46,11 @@ class SegmentTree{
         if(s==e){
             return new Node(s, e);
         }
-
         Node curr = new Node(s, e);
         int mid = s+ (e-s)/2;
         curr.left = constructTree(s, mid);
         curr.right = constructTree(mid+1, e);
-
-        curr.freqSum = curr.left.freqSum + curr.right.freqSum;
-
+        // curr.freqSum = curr.left.freqSum + curr.right.freqSum;
         return curr;
     }
 
@@ -63,17 +60,13 @@ class SegmentTree{
 
     private int update(Node node, int val){
         if(node==null) return 0;
-
         if(val < node.start || val > node.end){
             return node.freqSum;
         }
-
         if(node.start == node.end){
             return ++node.freqSum;
         }
-
         node.freqSum = update(node.left, val) + update(node.right, val);
-
         return node.freqSum;
     }
 
@@ -81,7 +74,6 @@ class SegmentTree{
         if(s > e){
             return 0;
         }
-
         return query(root, s, e);
     }
 
@@ -89,12 +81,9 @@ class SegmentTree{
         if(node == null || node.start > e || node.end < s){
             return 0;
         }
-
         if(s <= node.start && node.end <= e){
             return node.freqSum;
         }
-
-        return query(node.left, s, e)
-                + query(node.right, s, e);
+        return query(node.left, s, e) + query(node.right, s, e);
     }
 }
