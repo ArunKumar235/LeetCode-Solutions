@@ -1,74 +1,100 @@
 class Solution {
-
-    class Pair{
-        int val;
-        int idx;
-        Pair(int val, int idx){
-            this.val = val;
-            this.idx = idx;
-        }
-    }
-
-    int[] res;
-
     public List<Integer> countSmaller(int[] nums) {
-        res = new int[nums.length];
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for(int num: nums){
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        List<Integer> res = new ArrayList<>();
+
+        SegmentTree st = new SegmentTree(min, max);
         
-        Pair[] li = new Pair[nums.length];
-        for(int i = 0; i<nums.length; i++){
-            li[i] = new Pair(nums[i], i);
+        for(int i = nums.length-1; i>=0; i--){
+            st.add(nums[i]);
+            int cnt = st.querySum(min, nums[i]-1);
+            res.add(cnt);
         }
+        return res.reversed();
+    }
+}
 
-        mergeSort(li, 0, nums.length-1);
+class SegmentTree{
+    static class Node{
+        public int start;
+        public int end;
 
-        List<Integer> ans = new ArrayList<>();
-        for(int i: res){
-            ans.add(i);
+        public int freqSum;
+        Node left;
+        Node right;
+
+        Node(int start, int end){
+            this.start = start;
+            this.end = end;
+            freqSum = 0;
         }
-        return ans;
     }
 
-    private void mergeSort(Pair[] nums, int l, int r){
-        if(l>=r) return;
+    private final Node root;
 
-        int m = l+(r-l)/2;
-
-        mergeSort(nums, l, m);
-        mergeSort(nums, m+1, r);
-
-        merge(nums, l, m, r);
+    public SegmentTree(int s, int e){
+        root = constructTree(s, e);
     }
 
-    private void merge(Pair[] nums, int l, int m, int r){
-        Pair[] temp = new Pair[r-l+1];
-
-        int i = l;
-        int j = m+1;
-        int k = 0;
-
-        int rightCount = 0;
-
-        while(i<=m && j<=r){
-            if(nums[j].val < nums[i].val){
-                temp[k++] = nums[j++];
-                rightCount++;
-            }else{
-                res[nums[i].idx] += rightCount;
-                temp[k++] = nums[i++];
-            }
+    private Node constructTree(int s, int e){
+        if(s>e) return null;
+        if(s==e){
+            return new Node(s, e);
         }
 
-        while(i<=m){
-            res[nums[i].idx] += rightCount;
-            temp[k++] = nums[i++];
+        Node curr = new Node(s, e);
+        int mid = s+ (e-s)/2;
+        curr.left = constructTree(s, mid);
+        curr.right = constructTree(mid+1, e);
+
+        curr.freqSum = curr.left.freqSum + curr.right.freqSum;
+
+        return curr;
+    }
+
+    public int add(int val){
+        return update(root, val);
+    }
+
+    private int update(Node node, int val){
+        if(node==null) return 0;
+
+        if(val < node.start || val > node.end){
+            return node.freqSum;
         }
 
-        while(j<=r){
-            temp[k++] = nums[j++];
+        if(node.start == node.end){
+            return ++node.freqSum;
         }
 
-        for(int x = 0; x<temp.length; x++){
-            nums[l+x] = temp[x];
+        node.freqSum = update(node.left, val) + update(node.right, val);
+
+        return node.freqSum;
+    }
+
+    public int querySum(int s, int e){
+        if(s > e){
+            return 0;
         }
+
+        return query(root, s, e);
+    }
+
+    private int query(Node node, int s, int e){
+        if(node == null || node.start > e || node.end < s){
+            return 0;
+        }
+
+        if(s <= node.start && node.end <= e){
+            return node.freqSum;
+        }
+
+        return query(node.left, s, e)
+                + query(node.right, s, e);
     }
 }
