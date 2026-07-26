@@ -1,28 +1,17 @@
 class Solution {
-    static class Pair{
-        int val;
-        int minLeft;
-        Pair(int val, int minLeft){
-            this.val = val;
-            this.minLeft = minLeft;
-        }
-    }
-
     public boolean find132pattern(int[] nums) {
-        Stack<Pair> st = new Stack<>();
-        int currMin = nums[0];
+        Stack<Integer> st = new Stack<>();
+        //  i  <  j  <  k
+        // [i] < [k] < [j]
+        int third = Integer.MIN_VALUE;
+        for(int i = nums.length-1; i>=0; i--){
+            if(nums[i] < third) return true;
 
-        for(int i = 1; i<nums.length; i++){
-            while(!st.isEmpty() && nums[i] >= st.peek().val){
-                st.pop();
+            while(!st.isEmpty() && st.peek() < nums[i]){
+                third = st.pop();
             }
-            if(!st.isEmpty() && nums[i] < st.peek().val && nums[i] > st.peek().minLeft) 
-                return true;
-            
-            st.push(new Pair(nums[i], currMin));
-            currMin = Math.min(nums[i], currMin);
+            st.push(nums[i]);
         }
-
         return false;
     }
 }
