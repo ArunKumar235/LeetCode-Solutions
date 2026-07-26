@@ -13,7 +13,7 @@ class Solution {
                 rank.put(val, idx++);
             }
         }
-        
+
         SegmentTree st = new SegmentTree(idx);
 
         long inversions = 0;
@@ -21,8 +21,7 @@ class Solution {
         for(int i = 0; i < k; i++){
             int r = rank.get(nums[i]);
 
-            long lessOrEqual = st.query(0, r);
-            long greater = i - lessOrEqual;
+            long greater = st.query(r+1, idx-1);
 
             inversions += greater;
             st.add(r, 1);
@@ -38,7 +37,7 @@ class Solution {
             st.add(removedRank, -1);
 
             int addedRank = rank.get(nums[right]);
-            long greater = (k - 1L) - st.query(0, addedRank);
+            long greater = st.query(addedRank+1, idx-1);
 
             inversions += greater;
             st.add(addedRank, 1);
