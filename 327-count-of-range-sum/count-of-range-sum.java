@@ -35,7 +35,7 @@ class Solution {
             while(low<=r && nums[low]-nums[i] < this.lower){
                 low++;
             }
-            while(high<=r && nums[high]-nums[i] <= upper){
+            while(high<=r && nums[high]-nums[i] <= this.upper){
                 high++;
             }
             count += high-low;
