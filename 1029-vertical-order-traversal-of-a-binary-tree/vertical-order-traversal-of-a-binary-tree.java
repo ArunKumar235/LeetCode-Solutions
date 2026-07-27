@@ -21,8 +21,7 @@ class Solution {
         Queue<Pair> q = new ArrayDeque<>();
         q.offer(new Pair(root, 0, 0));
 
-        // values grouped by col -> row -> list of values (sorted)
-        Map<Integer, Map<Integer, List<Integer>>> map = new TreeMap<>();
+        List<NodeInfo> nodes = new ArrayList<>();
 
         while(!q.isEmpty()){
             int size = q.size();
@@ -31,22 +30,31 @@ class Solution {
                 int row = q.peek().row;
                 int col = q.poll().col;
                 
-                map.putIfAbsent(col, new TreeMap<>());
-                map.get(col).putIfAbsent(row, new ArrayList<>());
-                map.get(col).get(row).add(curr.val);
+                nodes.add(new NodeInfo(row, col, curr.val));
 
                 if(curr.left!=null) q.offer(new Pair(curr.left, row+1, col-1));
                 if(curr.right!=null) q.offer(new Pair(curr.right, row+1, col+1));    
             }
         }
-        for(Map.Entry<Integer, Map<Integer, List<Integer>>> entry: map.entrySet()){
-            List<Integer> li = new ArrayList<>();
-            for(Map.Entry<Integer, List<Integer>> ent: entry.getValue().entrySet()){
-                Collections.sort(ent.getValue());
-                li.addAll(ent.getValue());
+
+        nodes.sort((a, b) -> {
+            if(a.col != b.col) return Integer.compare(a.col, b.col);
+            if(a.row != b.row) return Integer.compare(a.row, b.row);
+            return Integer.compare(a.val, b.val);
+        });
+
+        List<Integer> curr = new ArrayList<>();
+        int currCol = nodes.get(0).col;
+        
+        for(NodeInfo node: nodes){
+            if(node.col != currCol){
+                res.add(curr);
+                currCol = node.col;
+                curr = new ArrayList<>();
             }
-            res.add(li);
+            curr.add(node.val);
         }
+        res.add(curr);
         return res;
     }
 }
@@ -59,5 +67,16 @@ class Pair{
         this.node = node;
         this.row = row;
         this.col = col;
+    }
+}
+
+class NodeInfo{
+    int row;
+    int col;
+    int val;
+    NodeInfo(int row, int col, int val){
+        this.row = row;
+        this.col = col;
+        this.val = val;
     }
 }
