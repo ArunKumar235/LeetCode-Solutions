@@ -9,15 +9,18 @@
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root==null) return null;
+        return find(root, p, q);
+    }
 
-        if(root==p || root==q) return root;
+    private TreeNode find(TreeNode node, TreeNode p, TreeNode q){
+        if(node==null) return null;
+        if(node==p || node==q) return node;
         
-        TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p, q);
-
-        if((left!=null) && (right!=null)) return root;
-
-        return left==null ? right : left;
+        TreeNode left = find(node.left, p, q);
+        TreeNode right = find(node.right, p, q);
+        
+        if(left!=null && right!=null) return node;
+        if(left==null) return right;
+        return left;
     }
 }
