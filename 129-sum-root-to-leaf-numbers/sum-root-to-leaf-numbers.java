@@ -16,16 +16,19 @@
 class Solution {
     int res = 0;
     public int sumNumbers(TreeNode root) {
-        dfs(root, 0);
+        dfs(root, new StringBuilder(""));
         return res;
     }
-    public void dfs(TreeNode node, int sum){
+    public void dfs(TreeNode node, StringBuilder sb){
         if(node==null) return;
         if(node.left==null && node.right==null){
-            res += (sum*10)+node.val;
+            sb.append(node.val);
+            res+=Integer.valueOf(sb.toString());
+            sb.setLength(sb.length()-1);
         }
-        sum = sum*10 + node.val;
-        dfs(node.left, sum);
-        dfs(node.right, sum);
+        sb.append(node.val);
+        dfs(node.left, sb);
+        dfs(node.right, sb);
+        sb.setLength(sb.length()-1);
     }
 }
