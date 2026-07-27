@@ -34,8 +34,10 @@ class Solution {
                 for(int i = idx - 1; i <= idx + 1; i++){
                     if(0 < i && i < n - 1){
                         int val = (nums[i - 1] < nums[i] && nums[i] > nums[i + 1]) ? 1 : 0;
-                        peak[i] = val;
-                        st.update(i, val);
+                        if(peak[i] != val){
+                            peak[i] = val;
+                            st.update(i, val);
+                        }
                     }
                 }
             }
