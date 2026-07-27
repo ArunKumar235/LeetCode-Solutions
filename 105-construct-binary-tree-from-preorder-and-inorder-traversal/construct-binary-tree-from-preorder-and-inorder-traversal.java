@@ -36,6 +36,7 @@ class Solution {
         int leftTreeSize = rootIn - startIn;
 
         root.left = build(preorder, inorder, startPre + 1, startPre + leftTreeSize, startIn, rootIn - 1);
+        
         root.right = build(preorder, inorder, startPre + leftTreeSize + 1, endPre, rootIn + 1, endIn);
 
         return root;
