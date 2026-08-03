@@ -1,28 +1,32 @@
 class Solution {
     public int maxAreaOfIsland(int[][] grid) {
-        int R = grid.length;
-        int C = grid[0].length;
-        int res = 0;
-        for(int i = 0; i<R; i++){
-            for(int j = 0; j<C; j++){
-                if(grid[i][j] == 1) res = Math.max(res, size(i, j, grid, R, C));
+        int area = 0;
+        for(int i = 0; i<grid.length; i++){
+            for(int j = 0; j<grid[0].length; j++){
+                if(grid[i][j] == 1)
+                area = Math.max(area, dfs(i, j, grid));
             }
         }
-        return res;
+        return area;
     }
 
-    private int size(int x, int y, int[][] grid, int R, int C){
-        if(x<0 || x>=R || y<0 || y>=C || grid[x][y]==0) return 0;
+    private int dfs(int r, int c, int[][] grid){
+        int[] rowDiff = new int[]{-1, 0, 1, 0};
+        int[] colDiff = new int[]{0, 1, 0, -1};
         
-        int res = grid[x][y];
-        grid[x][y] = 0;
+        int area = 0;
+        grid[r][c] = 0;
 
-        int[][] moves = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        for(int i = 0; i<4; i++){
+            int newR = r + rowDiff[i];
+            int newC = c + colDiff[i];
 
-        for(int[] move: moves){
-            res += size(x+move[0], y+move[1], grid, R, C);
-        } 
-
-        return res;
+            if( 0 <= newR && newR < grid.length &&
+                0 <= newC && newC < grid[0].length &&
+                grid[newR][newC] == 1
+            )
+            area += dfs(newR, newC, grid);
+        }
+        return area + 1;
     }
 }
