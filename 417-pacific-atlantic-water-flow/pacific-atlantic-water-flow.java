@@ -1,24 +1,22 @@
-class Solution {
+class Solution {    
+    int[] rowDiff = new int[]{-1, 0, 1, 0};
+    int[] colDiff = new int[]{0, 1, 0, -1};
+
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
         int R = heights.length;
         int C = heights[0].length;
         boolean[][] pacific = new boolean[R][C];
         boolean[][] atlantic = new boolean[R][C];
-        boolean[][] visited = new boolean[R][C];
 
         for(int i = 0; i<R; i++){
-            dfs(i, 0, pacific, visited, heights);
+            dfs(i, 0, pacific, heights);
+            dfs(i, C-1, atlantic, heights);
         }
         for(int i = 0; i<C; i++){
-            dfs(0, i, pacific, visited, heights);
+            dfs(0, i, pacific, heights);
+            dfs(R-1, i, atlantic, heights);
         }
-        visited = new boolean[R][C];
-        for(int i = 0; i<R; i++){
-            dfs(i, C-1, atlantic, visited, heights);
-        }
-        for(int i = 0; i<C; i++){
-            dfs(R-1, i, atlantic, visited, heights);
-        }
+        
         List<List<Integer>> li = new ArrayList<>();
         for(int i = 0; i<R; i++){
             for(int j = 0; j<C; j++){
@@ -30,12 +28,8 @@ class Solution {
         return li;
     }
 
-    private void dfs(int r, int c, boolean[][] ocean, boolean[][] visited, int[][] heights){
-        visited[r][c] = true;
+    private void dfs(int r, int c, boolean[][] ocean, int[][] heights){
         ocean[r][c] = true;
-
-        int[] rowDiff = new int[]{-1, 0, 1, 0};
-        int[] colDiff = new int[]{0, 1, 0, -1};
 
         for(int i = 0; i<4; i++){
             int newR = r + rowDiff[i];
@@ -44,9 +38,9 @@ class Solution {
             if( 0 <= newR && newR < ocean.length &&
                 0 <= newC && newC < ocean[0].length &&
                 heights[r][c] <= heights[newR][newC] &&
-                !visited[newR][newC]
+                !ocean[newR][newC]
             )
-                dfs(newR, newC, ocean, visited, heights);
+                dfs(newR, newC, ocean, heights);
         }
     }
 }
