@@ -7,7 +7,8 @@ class Solution {
 
         Queue<String> q = new ArrayDeque<>();
         q.offer("0000");
-
+        visited.add("0000");
+        
         int steps = 0;
 
         while(!q.isEmpty()){
