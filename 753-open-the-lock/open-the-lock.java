@@ -3,7 +3,6 @@ class Solution {
         if(target.equals("0000")) return 0;
 
         Set<String> visited = new HashSet<>(Arrays.asList(deadends));
-        
         if(visited.contains("0000")) return -1;
 
         Queue<String> q = new ArrayDeque<>();
