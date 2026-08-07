@@ -1,38 +1,38 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        int[] inDegree = new int[numCourses];
-        List<List<Integer>> graph = new ArrayList<>();
-        
-        for (int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<>());
-        }
+        List<List<Integer>> adj = new ArrayList<>();
 
-        for (int[] prereq : prerequisites) {
-            int course = prereq[0];
-            int preCourse = prereq[1];
-            graph.get(preCourse).add(course);
-            inDegree[course]++;
-        }
+        for(int i = 0; i<numCourses; i++) adj.add(new ArrayList<>());
 
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (inDegree[i] == 0) {
-                queue.offer(i);
+        for(int[] pre: prerequisites) adj.get(pre[0]).add(pre[1]);
+
+        int[] state = new int[numCourses];
+        // 0 = unvisited
+        // 1 = visiting
+        // 2 = visited
+
+        for(int i = 0; i < numCourses; i++){
+            if(!dfs(i, adj, state)){
+                return false;
             }
         }
+        return true;
+    }
 
-        int count = 0;
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            count++;
-            for (int neighbor : graph.get(current)) {
-                inDegree[neighbor]--;
-                if (inDegree[neighbor] == 0) {
-                    queue.offer(neighbor);
-                }
+    private boolean dfs(int course, List<List<Integer>> adj, int[] state){
+        if(state[course] == 1) return false; // cycle found
+    
+        if(state[course] == 2) return true; // already visited
+    
+        state[course] = 1;
+
+        for(int next : adj.get(course)){
+            if (!dfs(next, adj, state)) {
+                return false;
             }
         }
+        state[course] = 2;
 
-        return count == numCourses;
+        return true;
     }
 }
