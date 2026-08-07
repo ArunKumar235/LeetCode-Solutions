@@ -1,20 +1,30 @@
 class Solution {
     public int scheduleCourse(int[][] courses) {
-        Arrays.sort(courses, (a, b) -> Integer.compare(a[1], b[1]));
+        
+        Arrays.sort(courses, (a, b) -> (a[1] - b[1]));
+        PriorityQueue<int[]> maxh = new PriorityQueue<>((a, b) -> (b[0] - a[0]));
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        int days = 0;
 
-        int day = 0;
+        for(int[] course : courses){
+            if (course[0] > course[1]) continue;
 
-        for(int[] course: courses){
-            day += course[0];
-            pq.offer(course[0]);
+            days += course[0];
 
-            if(day > course[1]){
-                day -= pq.poll();
+            if(days > course[1]){
+                int[] longestCourse = maxh.peek();
+
+                if(longestCourse[0] >= course[0]){
+                    maxh.poll();
+                    days -= longestCourse[0];
+                    maxh.add(course);
+                }else{
+                    days -= course[0];
+                }
+            }else{
+                maxh.add(course);
             }
         }
-
-        return pq.size();
+        return maxh.size();
     }
 }
