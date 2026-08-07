@@ -6,21 +6,20 @@ class Solution {
 
         for(int[] pre: prerequisites) adj.get(pre[0]).add(pre[1]);
 
-        int[] state = new int[numCourses];
+        int[] state = new int[numCourses + 1];
         // 0 unvisited
         // 1 visiting
         // 2 visited
-
-        List<Integer> order = new ArrayList<>();
+        int[] order = new int[numCourses];
         
         for(int i = 0; i<numCourses; i++){
             if(!dfs(i, adj, state, order)) return new int[]{};
         }
         
-        return order.stream().mapToInt(Integer::intValue).toArray();
+        return order;
     }
 
-    private boolean dfs(int course, List<List<Integer>> adj, int[] state, List<Integer> order){
+    private boolean dfs(int course, List<List<Integer>> adj, int[] state, int[] order){
         if(state[course] == 1) return false;
 
         if(state[course] == 2) return true;
@@ -31,7 +30,8 @@ class Solution {
             if(!dfs(next, adj, state, order)) return false;
         }
 
-        order.add(course);
+        int idx = state[order.length]++;
+        order[idx] = course;
         state[course] = 2;
 
         return true;
