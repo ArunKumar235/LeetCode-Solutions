@@ -11,21 +11,16 @@ class Solution {
         // 1 visiting
         // 2 visited
 
-        Set<Integer> order = new LinkedHashSet<>();
+        List<Integer> order = new ArrayList<>();
         
         for(int i = 0; i<numCourses; i++){
-            if(!dfs(i, adj, state, order)) break;
+            if(!dfs(i, adj, state, order)) return new int[]{};
         }
-
-
-       if(order.size()!=numCourses) return new int[]{};
-
-       int i = 0;
-       for(int course: order) state[i++] = course;
-       return state;
+        
+        return order.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    private boolean dfs(int course, List<List<Integer>> adj, int[] state, Set<Integer> order){
+    private boolean dfs(int course, List<List<Integer>> adj, int[] state, List<Integer> order){
         if(state[course] == 1) return false;
 
         if(state[course] == 2) return true;
@@ -35,7 +30,7 @@ class Solution {
         for(int next: adj.get(course)){
             if(!dfs(next, adj, state, order)) return false;
         }
-        
+
         order.add(course);
         state[course] = 2;
 
