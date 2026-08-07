@@ -27,7 +27,7 @@ class Solution {
         state[course] = 1;
 
         for(int next : adj.get(course)){
-            if (!dfs(next, adj, state)) {
+            if(!dfs(next, adj, state)){
                 return false;
             }
         }
