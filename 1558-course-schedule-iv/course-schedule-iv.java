@@ -1,42 +1,33 @@
 class Solution {
-    public List<Boolean> checkIfPrerequisite(
-        int numCourses, 
-        int[][] prerequisites, 
-        int[][] queries
-    ){
+    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
         Map<Integer, Set<Integer>> revAdj = new HashMap<>();
-
-        Map<Integer, Set<Integer>> preReq = new HashMap<>();
 
         for(int i = 0; i<numCourses; i++) revAdj.put(i, new HashSet<>());
 
         for(int[] pre: prerequisites) revAdj.get(pre[1]).add(pre[0]);
 
-        for(int i = 0; i<numCourses; i++) dfs(i, revAdj, preReq);
+        boolean[] visited = new boolean[numCourses];
 
-        List<Boolean> res = new ArrayList<>();
-        
-        for(int[] q: queries){
-            res.add(preReq.get(q[1]).contains(q[0]));
-        }
-        return res;
+        for(int i = 0; i<numCourses; i++) dfs(revAdj, i, visited);
+
+        List<Boolean> ans = new ArrayList<>();
+
+        for(int[] q: queries) ans.add(revAdj.get(q[1]).contains(q[0]));
+
+        return ans;
     }
 
-    private Set<Integer> dfs(
-        int course, 
-        Map<Integer, Set<Integer>> revAdj, 
-        Map<Integer, Set<Integer>> preReq
-    ){
-        if(preReq.containsKey(course)) return preReq.get(course);
+    private void dfs(Map<Integer, Set<Integer>> revAdj, int course, boolean[] visited){
+        if(visited[course]) return;
 
-        Set<Integer> reqs = new HashSet<>();
+        visited[course] = true;
 
-        for(int pre: revAdj.get(course)){
-            reqs.addAll(dfs(pre, revAdj, preReq));
+        Set<Integer> all = revAdj.get(course);
+        List<Integer> parents = new ArrayList<>(all);
+
+        for(int parent: parents){
+            dfs(revAdj, parent, visited);
+            all.addAll(revAdj.get(parent));
         }
-        
-        reqs.add(course);
-        preReq.put(course, reqs);
-        return reqs;
     }
 }
