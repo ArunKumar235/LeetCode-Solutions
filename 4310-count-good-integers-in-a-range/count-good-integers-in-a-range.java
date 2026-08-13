@@ -41,9 +41,7 @@ class Solution {
                 }
             }
         } 
-        if(tight == 0){
-            dp[idx][tight][begin][prev] = ans;
-        }
+        dp[idx][tight][begin][prev] = ans;
         return ans;
     }
 }
