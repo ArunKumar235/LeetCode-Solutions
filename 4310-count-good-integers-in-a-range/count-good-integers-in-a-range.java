@@ -24,7 +24,7 @@ class Solution {
             return begin == 1 ? 0 : 1;
         }
 
-        if(tight == 0 && dp[idx][tight][begin][prev] != -1) return dp[idx][tight][begin][prev];
+        if(dp[idx][tight][begin][prev] != -1) return dp[idx][tight][begin][prev];
 
         long ans = 0;
 
