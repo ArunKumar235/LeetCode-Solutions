@@ -1,73 +1,63 @@
 class Solution {
     public int numDupDigitsAtMostN(int n) {
-        return count(n);
+        return n - countUnique(n);
     }
 
-    private int count(int num){
+    private int countUnique(int num){
         String str = String.valueOf(num);
         int len = str.length();
-
-        int bitMask = (1 << 10) - 1;
-
-        // idx - tight - begin - bitMask - repeat
-        int[][][][][] dp = new int[len][2][2][bitMask + 1][2];
+        
+        // idx - tight - begin - bitMask (1024 - 10000000000)
+        int[][][][] dp = new int[len][2][2][1 << 10];
 
         for(int i = 0; i < len; i++){
             for(int j = 0; j < 2; j++){
                 for(int k = 0; k < 2; k++){
-                    for(int mask = 0; mask <= bitMask; mask++){
-                        Arrays.fill(dp[i][j][k][mask], -1);
-                    }
+                    Arrays.fill(dp[i][j][k], -1);
                 }
             }
         }
-
-        return func(str, 0, 0, 0, bitMask, dp, 0);
+        return func(str, 0, 0, 0, 0, dp);
     }
 
-    // tight - 0 - previous digits are equal
-    // tight - 1 - smaller digit occurred
+    // tight - 0 - previous digits equal to n
+    // tight - 1 - already smaller than n
 
     // begin - 0 - number has not started
     // begin - 1 - number has started
 
-    // bitMask:
-    // bit = 1 -> digit has not appeared
-    // bit = 0 -> digit has already appeared
+    // mask:
+    // bit - 0 - digit unused
+    // bit - 1 - digit already used
 
-    private int func(String str, int idx, int tight, int begin,
-                     int bitMask, int[][][][][] dp, int repeat){
+    private int func(String str, int idx, int tight, int begin, int mask, int[][][][] dp){
 
         if(idx == str.length()){
-            return repeat;
+            return begin == 1 ? 1 : 0;
         }
 
-        if(dp[idx][tight][begin][bitMask][repeat] != -1){
-            return dp[idx][tight][begin][bitMask][repeat];
-        }
+        if(dp[idx][tight][begin][mask] != -1) return dp[idx][tight][begin][mask];
+
+        int limit = (tight == 1) ? 9 : str.charAt(idx) - '0';
 
         int ans = 0;
-
-        int limit = tight == 1 ? 9 : str.charAt(idx) - '0';
 
         for(int d = 0; d <= limit; d++){
             int newTight = (tight == 0 && d == limit) ? 0 : 1;
 
             if(begin == 0 && d == 0){
-                ans += func(str, idx + 1, newTight, 0, bitMask, dp, repeat);
-            }else{
-                int newBitMask = bitMask;
-                int newRepeat = repeat;
-
-                if((bitMask & (1 << d)) == 0){
-                    newRepeat = 1;
-                }else{
-                    newBitMask = bitMask ^ (1 << d);
-                }
-
-                ans += func(str, idx+1, newTight, 1, newBitMask, dp, newRepeat);
+                ans += func(str, idx+1, newTight, 0, mask, dp);
+                continue;
             }
+
+            if((mask & (1 << d)) != 0){ // digit occured already, so not unique
+                continue;
+            }
+
+            int newMask = mask | (1 << d);
+
+            ans += func(str, idx+1, newTight, 1, newMask, dp);
         }
-        return dp[idx][tight][begin][bitMask][repeat] = ans;
+        return dp[idx][tight][begin][mask] = ans;
     }
 }
