@@ -4,13 +4,20 @@ class Solution {
         int total = 0;
         for(int pile: piles) total += pile;
         
-        int aliceChoice1 = 0;
-        int aliceChoice2 = 0;
-        for(int i = 0; i<n; i+=2){
-            aliceChoice1 += piles[i];
-            aliceChoice2 += piles[i+1];
+        int[][] dp = new int[n][n];
+        
+        for(int l = n-1; l>=0; l--){
+            for(int r = l; r<n; r++){
+                boolean evenLen = (r-l) %2 == 0;
+                int left = evenLen ? piles[l] : 0;
+                int right = evenLen ? piles[r] : 0;
+                if(l==r){
+                    dp[l][r] = piles[l];
+                }else{
+                    dp[l][r] = Math.max(left + dp[l+1][r], right + dp[l][r-1]);
+                }
+            }
         }
-
-        return aliceChoice1 > total - aliceChoice1 || aliceChoice2 > total - aliceChoice2;
+        return dp[0][n-1] > total - dp[0][n-1];
     }
 }
