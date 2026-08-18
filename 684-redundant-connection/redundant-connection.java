@@ -1,8 +1,8 @@
 class Solution {
     List<List<Integer>> adj;
     Set<Integer> cycle;
-    boolean[] visit;
-    int cycleStart;
+    boolean[] visited;
+    int cycleStart = -1;
 
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
@@ -17,7 +17,7 @@ class Solution {
         }
 
         cycle = new HashSet<>();
-        visit = new boolean[n+1];
+        visited = new boolean[n+1];
 
         dfs(1, -1);
 
@@ -29,17 +29,19 @@ class Solution {
     }
 
     private boolean dfs(int node, int par){
-        if(visit[node]){
+        if(visited[node]){
             cycleStart = node;
             return true;
         }
 
-        visit[node] = true;
+        visited[node] = true;
         for(int nei: adj.get(node)){
             if(nei==par) continue;
-            if(dfs(nei, node)){
-                if(cycleStart != -1) cycle.add(node);
-                if(node==cycleStart) cycleStart = -1;
+            
+            if(cycle.isEmpty()) dfs(nei, node);
+            if(cycleStart != -1) cycle.add(node);
+            if(node==cycleStart){ 
+                cycleStart = -1;
                 return true;
             }
         }
