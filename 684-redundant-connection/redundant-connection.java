@@ -28,10 +28,10 @@ class Solution {
         return new int[]{};
     }
 
-    private boolean dfs(int node, int par){
+    private void dfs(int node, int par){
         if(visited[node]){
             cycleStart = node;
-            return true;
+            return;
         }
 
         visited[node] = true;
@@ -42,9 +42,9 @@ class Solution {
             if(cycleStart != -1) cycle.add(node);
             if(node==cycleStart){ 
                 cycleStart = -1;
-                return true;
+                return;
             }
         }
-        return false;
+        return;
     }
 }
