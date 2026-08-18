@@ -28,23 +28,29 @@ class Solution {
         return new int[]{};
     }
 
-    private void dfs(int node, int par){
-        if(visited[node]){
-            cycleStart = node;
-            return;
-        }
-
+    private boolean dfs(int node, int par){
         visited[node] = true;
-        for(int nei: adj.get(node)){
-            if(nei==par) continue;
-            
-            if(cycle.isEmpty()) dfs(nei, node);
-            if(cycleStart != -1) cycle.add(node);
-            if(node==cycleStart){ 
-                cycleStart = -1;
-                return;
+
+        for(int nei : adj.get(node)){
+            if(nei == par) continue;
+
+            if(visited[nei]){ // cycle found
+                cycleStart = nei;
+                cycle.add(node);
+                return true;
+            }
+
+            if(dfs(nei, node)){ // unwind the cycle
+                if(cycleStart != -1){
+                    cycle.add(node);
+
+                    if(node == cycleStart){ // full cycle added
+                        cycleStart = -1;
+                    }
+                }
+                return true;
             }
         }
-        return;
+        return false;
     }
 }
