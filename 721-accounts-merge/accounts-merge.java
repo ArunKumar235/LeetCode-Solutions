@@ -59,11 +59,9 @@ class UnionFind{
         if(parent[pu] <= parent[pv]){
             parent[pu] += parent[pv];
             parent[pv] = pu;
-            parent[v] = pu;
         }else{
             parent[pv] += parent[pu];
             parent[pu] = pv;
-            parent[v] = pv;
         }
     }
 
