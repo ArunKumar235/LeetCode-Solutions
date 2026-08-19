@@ -6,14 +6,12 @@ class Solution {
         Arrays.fill(parent, -1);
 
         for(int i = 0; i<n; i++){
-            for(int j = i; j<n; j++){
+            for(int j = i+1; j<n; j++){
                 if(isConnected[i][j] == 1){
                     union(i, j);
                 }
             }
         }
-        for(int p: parent) System.out.print(p+" ");
-
         int res = 0;
         for(int p: parent) if(p<0) res++;
         return res;
@@ -28,11 +26,9 @@ class Solution {
         if(parent[pu] <= parent[pv]){
             parent[pu] += parent[pv];
             parent[pv] = pu;
-            parent[v] = pu;
         }else{
             parent[pv] += parent[pu];
             parent[pu] = pv;
-            parent[u] = pv;
         }
     }
 
@@ -40,7 +36,6 @@ class Solution {
         if(parent[u] < 0) return u;
 
         parent[u] = find(parent[u]);
-
         return parent[u];
     }
 }
