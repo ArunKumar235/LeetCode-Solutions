@@ -1,56 +1,41 @@
 class Solution {
-    List<List<Integer>> adj;
-    Set<Integer> cycle;
-    boolean[] visited;
-    int cycleStart = -1;
-
+    int[] parent;
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
-
-        adj = new ArrayList<>();
-        
-        for(int i = 0; i<=n; i++) adj.add(new ArrayList<>());
+        parent = new int[n];
+        Arrays.fill(parent, -1);
 
         for(int[] e: edges){
-            adj.get(e[0]).add(e[1]);
-            adj.get(e[1]).add(e[0]);
+            if(union(e[0]-1, e[1]-1)){
+                return e;
+            }
         }
 
-        cycle = new HashSet<>();
-        visited = new boolean[n+1];
-
-        dfs(1, -1);
-
-        for(int i = n-1; i>=0; i--){
-            if(cycle.contains(edges[i][0]) && cycle.contains(edges[i][1])) 
-                return new int[]{edges[i][0], edges[i][1]};
-        }
         return new int[]{};
     }
 
-    private boolean dfs(int node, int par){
-        visited[node] = true;
+    private boolean union(int u, int v){
+        int pu = find(u);
+        int pv = find(v);
 
-        for(int nei : adj.get(node)){
-            if(nei == par) continue;
+        if(pu == pv) return true;
 
-            if(visited[nei]){ // cycle found
-                cycleStart = nei;
-                cycle.add(node);
-                return true;
-            }
-
-            if(dfs(nei, node)){ // unwind the cycle
-                if(cycleStart != -1){
-                    cycle.add(node);
-
-                    if(node == cycleStart){ // full cycle added
-                        cycleStart = -1;
-                    }
-                }
-                return true;
-            }
+        if(pu <= pv){
+            parent[pu] += parent[pv];
+            parent[pv] = pu;
+            parent[v] = pu;
+        }else{
+            parent[pv] += parent[pu];
+            parent[pu] = pv;
+            parent[u] = pv;
         }
         return false;
+    }
+
+    private int find(int u){
+        while(parent[u] >= 0){
+            u = parent[u];
+        }
+        return u;
     }
 }
