@@ -37,9 +37,10 @@ class Solution {
     }
 
     private int find(int u){
-        while(parent[u] >= 0){
-            u = parent[u];
-        }
-        return u;
+        if(parent[u] < 0) return u;
+
+        parent[u] = find(parent[u]);
+
+        return parent[u];
     }
 }
