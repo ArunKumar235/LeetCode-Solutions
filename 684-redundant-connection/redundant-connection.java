@@ -23,11 +23,11 @@ class Solution {
         if(pu <= pv){
             parent[pu] += parent[pv];
             parent[pv] = pu;
-            parent[v] = pu;
+            // parent[v] = pu;
         }else{
             parent[pv] += parent[pu];
             parent[pu] = pv;
-            parent[u] = pv;
+            // parent[u] = pv;
         }
         return false;
     }
