@@ -14,28 +14,28 @@ class Solution {
 
         int res = 0;
 
-        boolean[] visited = new boolean[n];
+        Set<Integer> visited = new HashSet<>();
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        
         pq.offer(new int[]{k-1, 0});
 
         while(!pq.isEmpty()){
             int u = pq.peek()[0];
             int t = pq.poll()[1];
-            if(visited[u]) continue;
 
+            if(visited.contains(u)) continue;
+
+            visited.add(u);
             res = Math.max(res, t);
-            visited[u] = true;
 
             for(int[] nei: adj.get(u)){
                 int v = nei[0];
                 int t1 = nei[1];
-                if(!visited[v]){
+                if(!visited.contains(v)){
                     pq.offer(new int[]{v, t + t1});
                 }
             }
         }
-        for(boolean v: visited) if(!v) return -1;
-
-        return res;
+        return visited.size() == n ? res : -1;
     }
 }
