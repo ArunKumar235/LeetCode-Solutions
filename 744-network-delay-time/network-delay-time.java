@@ -12,26 +12,30 @@ class Solution {
             adj.get(u).add(new int[]{v, w});
         }
 
-        int[] dist = new int[n];
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        int res = 0;
 
-        dfs(k-1, 0, adj, dist);
+        boolean[] visited = new boolean[n];
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        pq.offer(new int[]{k-1, 0});
 
-        int max = 0;
-        for(int d: dist){
-            if(d == Integer.MAX_VALUE) return -1;
-            max = Math.max(max, d);
+        while(!pq.isEmpty()){
+            int u = pq.peek()[0];
+            int t = pq.poll()[1];
+            if(visited[u]) continue;
+
+            res = Math.max(res, t);
+            visited[u] = true;
+
+            for(int[] nei: adj.get(u)){
+                int v = nei[0];
+                int t1 = nei[1];
+                if(!visited[v]){
+                    pq.offer(new int[]{v, t + t1});
+                }
+            }
         }
-        return max;
-    }
+        for(boolean v: visited) if(!v) return -1;
 
-    private void dfs(int node, int time, List<List<int[]>> adj, int[] dist){
-        if(time >= dist[node]) return;
-        
-        dist[node] = time;
-
-        for(int[] nei: adj.get(node)){
-            dfs(nei[0], time + nei[1], adj, dist);
-        }
+        return res;
     }
 }
