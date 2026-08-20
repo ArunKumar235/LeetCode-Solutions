@@ -20,15 +20,13 @@ class Solution {
             if(edgeCount[i] == 1) leaves.offer(i);
         }
 
-        int remainingNodes = n;
-
-        while(remainingNodes > 2){
+        while(n > 2){
             int size = leaves.size();
+            n -= size;
 
             for(int i = 0; i<size; i++){
                 int leaf = leaves.poll();
                 edgeCount[leaf]--;
-                remainingNodes--;
                 
                 for(int nei: adj.get(leaf)){
                     edgeCount[nei]--;
