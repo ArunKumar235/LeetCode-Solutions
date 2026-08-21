@@ -30,8 +30,6 @@ class Solution {
 
             if(stop > k) continue;
 
-            if(price > dp[u][stop]) continue;
-
             if(!adj.containsKey(u)) continue;
             for(int[] nei: adj.get(u)){
                 int v = nei[0];
