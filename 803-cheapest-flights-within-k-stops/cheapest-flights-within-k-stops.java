@@ -28,7 +28,7 @@ class Solution {
 
             if(u == dst) return price;
 
-            if(stop == k+1) continue;
+            if(stop > k) continue;
 
             if(price > dp[u][stop]) continue;
 
