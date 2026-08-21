@@ -4,18 +4,17 @@ class Solution {
 
         int dst = n-1;
 
-        Map<Integer, List<int[]>> adj = new HashMap<>();
+        List<int[]>[] adj = new ArrayList[n];
+
+        for(int i = 0; i<n; i++) adj[i] = new ArrayList<>();
 
         for(int[] e: edges){
             int u = e[0];
             int v = e[1];
             int time = e[2];
 
-            adj.putIfAbsent(u, new ArrayList<>());
-            adj.putIfAbsent(v, new ArrayList<>());
-
-            adj.get(u).add(new int[]{v, time});
-            adj.get(v).add(new int[]{u, time});
+            adj[u].add(new int[]{v, time});
+            adj[v].add(new int[]{u, time});
         }
 
         // node - time - cost
@@ -36,9 +35,7 @@ class Solution {
 
             if(u == dst) return cost;
 
-            if(!adj.containsKey(u)) continue;
-
-            for(int[] nei: adj.get(u)){
+            for(int[] nei: adj[u]){
                 int v = nei[0];
                 int newTime = time + nei[1];
                 int newCost = cost + passingFees[v];
