@@ -1,30 +1,36 @@
 class Solution {
     public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends, int id, int level) {
-        int n = friends.length;
-        int[] dist = new int[n];
+        boolean[] visited = new boolean[friends.length];
+        Queue<Integer> q = new ArrayDeque<>();
         
-        Arrays.fill(dist, (int)1e9);
-        dist[id] = 0;
+        q.offer(id);
+        visited[id] = true;
+        
+        int k = 0;
+        while(!q.isEmpty()){
+            int size = q.size();
+            if(k == level) break;
+            k++;
 
-        for(int k = 0; k<level; k++){
-            for(int u = 0; u<n; u++){
+            for(int i = 0; i<size; i++){
+                int u = q.poll();
+
                 for(int v: friends[u]){
-                    if(dist[u] != (int)1e9 && dist[u] + 1 < dist[v]){
-                        dist[v] = dist[u] + 1;
-                    }
-                    if(dist[v] != (int)1e9 && dist[v] + 1 < dist[u]){
-                        dist[u] = dist[v] + 1;
+                    if(!visited[v]){
+                        visited[v] = true;
+                        q.offer(v);
                     }
                 }
             }
         }
+
         Map<String, Integer> freq = new HashMap<>();
         
-        for(int i = 0; i<n; i++){
-            if(dist[i] == level){
-                for(String video: watchedVideos.get(i)) freq.put(video, freq.getOrDefault(video, 0)+1);
-            }
+        while(!q.isEmpty()){
+            int node = q.poll();
+            for(String video: watchedVideos.get(node)) freq.put(video, freq.getOrDefault(video, 0)+1);
         }
+
         List<Map.Entry<String, Integer>> res = new ArrayList<>(freq.entrySet());
         Collections.sort(res, (a, b) ->{ 
             if(a.getValue() - b.getValue() == 0) return a.getKey().compareTo(b.getKey());
