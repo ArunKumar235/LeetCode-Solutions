@@ -36,6 +36,8 @@ class Solution {
 
             if(u == dst) return cost;
 
+            if(cost > dp[u][time]) continue;
+
             if(!adj.containsKey(u)) continue;
 
             for(int[] nei: adj.get(u)){
