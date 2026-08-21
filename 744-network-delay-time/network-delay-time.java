@@ -1,41 +1,47 @@
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
         List<List<int[]>> adj = new ArrayList<>();
-
         for(int i = 0; i<n; i++) adj.add(new ArrayList<>());
+        
+        int[] dist = new int[n];
+        Arrays.fill(dist, (int) 1e9);
 
-        for(int[] t: times){
-            int u = t[0]-1;
-            int v = t[1]-1;
-            int w = t[2];
+        for(int[] edge: times){
+            int u = edge[0]-1;
+            int v = edge[1]-1;
+            int time = edge[2];
 
-            adj.get(u).add(new int[]{v, w});
+            adj.get(u).add(new int[]{v, time});
         }
 
-        int res = 0;
+        // node - time
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{k-1, 0});
+        dist[k-1] = 0;
 
-        Set<Integer> visited = new HashSet<>();
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
-        
-        pq.offer(new int[]{k-1, 0});
+        // Shortest Path Faster Algorithm (SPFA)
+        // optimised bellman-ford algorithm
+        // instead of relaxing all nodes, relax only updated nodes
+        while(!q.isEmpty()){
+            int[] curr = q.poll();
+            int u = curr[0];
+            int time = curr[1];
 
-        while(!pq.isEmpty()){
-            int u = pq.peek()[0];
-            int t = pq.poll()[1];
-
-            if(visited.contains(u)) continue;
-
-            visited.add(u);
-            res = Math.max(res, t);
+            if(dist[u] < time) continue;
 
             for(int[] nei: adj.get(u)){
                 int v = nei[0];
-                int t1 = nei[1];
-                if(!visited.contains(v)){
-                    pq.offer(new int[]{v, t + t1});
+                int newTime = time + nei[1];
+
+                if(newTime < dist[v]){
+                    dist[v] = newTime;
+                    q.offer(new int[]{v, newTime});
                 }
             }
         }
-        return visited.size() == n ? res : -1;
+        int max = 0;
+        for(int t: dist) max = Math.max(max, t);
+        
+        return max == (int) 1e9 ? -1 : max;
     }
 }
