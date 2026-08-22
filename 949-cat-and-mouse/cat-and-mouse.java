@@ -3,52 +3,87 @@ class Solution {
     int MOUSE = 1;
     int CAT = 2;
 
+    int MOUSE_TURN = 0;
+    int CAT_TURN = 1;
+
     public int catMouseGame(int[][] graph) {
         int n = graph.length;
 
-        // time - x(mouse position) - y(cat position)
-        int[][][] dp = new int[6*n][n][n];
+        // mouse - cat - turn
+        int[][][] result = new int[n][n][2];
 
-        for(int i = 0; i<6*n; i++)
-            for(int j = 0; j<n; j++)
-                Arrays.fill(dp[i][j], -1);
-
-        return search(0, 1, 2, graph, dp);
-    }
-
-    private int search(int time, int mouse, int cat, int[][] graph, int[][][] dp){
-        if(time == 6*graph.length) return DRAW;
-        if(mouse == 0) return MOUSE;
-        if(mouse == cat) return CAT;
-        if(dp[time][mouse][cat] != -1) return dp[time][mouse][cat];
-
-        boolean isMouse = time%2 == 0;
-
-        if(isMouse){
-            int result = CAT;
-
-            for(int nextMouse: graph[mouse]){
-                int nextRes = search(time+1, nextMouse, cat, graph, dp);
-                
-                if(nextRes == MOUSE) return dp[time][mouse][cat] = MOUSE;
-
-                if(nextRes == DRAW) result = DRAW;
-            }
-            return dp[time][mouse][cat] = result;
+        // mouse - 0 - mouse win
+        for(int cat = 1; cat<n; cat++){
+            result[0][cat][MOUSE_TURN] = MOUSE;
+            result[0][cat][CAT_TURN] = MOUSE;
         }
-        else{
-            int result = MOUSE;
-
-            for(int nextCat: graph[cat]){
-                if(nextCat == 0) continue;
-
-                int nextRes = search(time+1, mouse, nextCat, graph, dp);
-
-                if(nextRes == CAT) return dp[time][mouse][cat] = CAT;
-
-                if(nextRes == DRAW) result = DRAW;
-            }
-            return dp[time][mouse][cat] = result;
+        // mouse == cat(!=0) - cat win
+        for(int pos = 1; pos<n; pos++){
+            result[pos][pos][MOUSE_TURN] = CAT;
+            result[pos][pos][CAT_TURN] = CAT;
         }
+
+        boolean changed = true;
+
+        while(changed){
+            changed = false;
+
+            for(int mouse = 0; mouse<n; mouse++){
+                for(int cat = 1; cat<n; cat++){
+
+                    if(mouse == 0 || mouse == cat) continue;
+
+                    // Mouse turn
+                    if(result[mouse][cat][MOUSE_TURN] == DRAW){
+                        boolean canWin = false;
+                        boolean allLose = true;
+
+                        for(int nextMouse : graph[mouse]){
+                            int nextResult = result[nextMouse][cat][CAT_TURN];
+
+                            if(nextResult == MOUSE){
+                                canWin = true;
+                                break;
+                            }
+                            if(nextResult != CAT) allLose = false;
+                        }
+                        if(canWin){
+                            result[mouse][cat][MOUSE_TURN] = MOUSE;
+                            changed = true;
+                        }
+                        else if(allLose){
+                            result[mouse][cat][MOUSE_TURN] = CAT;
+                            changed = true;
+                        }
+                    }
+
+                    // Cat turn
+                    if(result[mouse][cat][CAT_TURN] == DRAW){
+                        boolean canWin = false;
+                        boolean allLose = true;
+
+                        for(int nextCat : graph[cat]){
+                            if(nextCat == 0) continue;
+                            int nextResult = result[mouse][nextCat][MOUSE_TURN];
+
+                            if(nextResult == CAT){
+                                canWin = true;
+                                break;
+                            }
+                            if(nextResult != MOUSE) allLose = false;
+                        }
+                        if(canWin){
+                            result[mouse][cat][CAT_TURN] = CAT;
+                            changed = true;
+                        }
+                        else if(allLose){
+                            result[mouse][cat][CAT_TURN] = MOUSE;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+        return result[1][2][MOUSE_TURN];
     }
 }
