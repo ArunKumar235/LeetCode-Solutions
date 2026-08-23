@@ -1,11 +1,8 @@
 class Solution {
     public int longestSubarray(int[] nums, int k) {
-        int max = 0;
-        for(int num : nums) max = Math.max(max, num);
+        buildSPF((int) 1e5);
 
-        buildSPF(max);
-
-        int[] freq = new int[max+1];
+        int[] freq = new int[(int) 1e5 + 1];
 
         int l = 0;
         int unique = 0;
