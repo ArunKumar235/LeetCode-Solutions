@@ -24,7 +24,7 @@ class Solution {
         int k = 0;
 
         while(i <= mid && j <= r){
-            if(check(nums[i], nums[j]) == -1){
+            if(check(nums[i], nums[j]) <= 0){
                 res[k++] = nums[i++];
             }else{
                 res[k++] = nums[j++];
@@ -36,21 +36,23 @@ class Solution {
         for(String val: res) nums[l++] = val;
     }
     
-    private int check(String a, String b){
+    private int check(String a, String b) {
         int i = 0;
         int j = 0;
-        while(i < a.length() && a.charAt(i) == '0') i++;
-        while(j < b.length() && b.charAt(j) == '0') j++;
-        
+
+        while (i < a.length() - 1 && a.charAt(i) == '0') i++;
+        while (j < b.length() - 1 && b.charAt(j) == '0') j++;
+
         int lenA = a.length() - i;
         int lenB = b.length() - j;
 
         if (lenA < lenB) return -1;
         if (lenA > lenB) return 1;
-        
-        while(i<a.length()){
+
+        while (i < a.length()) {
             if(a.charAt(i) < b.charAt(j)) return -1;
-            if(b.charAt(j) < a.charAt(i)) return 1;
+            if(a.charAt(i) > b.charAt(j)) return 1;
+
             i++;
             j++;
         }
