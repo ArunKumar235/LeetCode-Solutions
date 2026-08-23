@@ -1,5 +1,7 @@
 class Solution {
     public String kthLargestNumber(String[] nums, int k) {
+        res = new String[nums.length];
+        
         mergeSort(0, nums.length-1, nums);
         
         return nums[nums.length - k];
@@ -14,9 +16,9 @@ class Solution {
 
         merge(l, r, nums);
     }
+    String[] res;
 
     private void merge(int l, int r, String[] nums){
-        String[] res = new String[r - l + 1];
         int mid = l + (r-l)/2;
 
         int i = l;
@@ -33,7 +35,8 @@ class Solution {
         while(i <= mid) res[k++] = nums[i++];
         while(j <= r) res[k++] = nums[j++];
 
-        for(String val: res) nums[l++] = val;
+        k = 0;
+        while(l <= r) nums[l++] = res[k++];
     }
     
     private int check(String a, String b) {
