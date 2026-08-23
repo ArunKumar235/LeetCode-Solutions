@@ -1,44 +1,17 @@
 class Solution {
     public String kthLargestNumber(String[] nums, int k) {
-        res = new String[nums.length];
+        PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> check(a, b));
         
-        mergeSort(0, nums.length-1, nums);
-        
-        return nums[nums.length - k];
-    }
+        for(String num : nums){
+            pq.offer(num);
 
-    private void mergeSort(int l, int r, String[] nums){
-        if(l >= r) return;
-        
-        int mid = l + (r-l)/2;
-        mergeSort(l, mid, nums);
-        mergeSort(mid+1, r, nums);
-
-        merge(l, r, nums);
-    }
-    String[] res;
-
-    private void merge(int l, int r, String[] nums){
-        int mid = l + (r-l)/2;
-
-        int i = l;
-        int j = mid+1;
-        int k = 0;
-
-        while(i <= mid && j <= r){
-            if(check(nums[i], nums[j]) <= 0){
-                res[k++] = nums[i++];
-            }else{
-                res[k++] = nums[j++];
+            if(pq.size() > k){
+                pq.poll();
             }
         }
-        while(i <= mid) res[k++] = nums[i++];
-        while(j <= r) res[k++] = nums[j++];
-
-        k = 0;
-        while(l <= r) nums[l++] = res[k++];
+        return pq.peek();
     }
-    
+
     private int check(String a, String b) {
         int i = 0;
         int j = 0;
