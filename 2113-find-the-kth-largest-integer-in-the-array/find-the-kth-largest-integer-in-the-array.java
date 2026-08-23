@@ -13,25 +13,10 @@ class Solution {
     }
 
     private int check(String a, String b) {
-        int i = 0;
-        int j = 0;
-
-        while (i < a.length() - 1 && a.charAt(i) == '0') i++;
-        while (j < b.length() - 1 && b.charAt(j) == '0') j++;
-
-        int lenA = a.length() - i;
-        int lenB = b.length() - j;
-
-        if (lenA < lenB) return -1;
-        if (lenA > lenB) return 1;
-
-        while (i < a.length()) {
-            if(a.charAt(i) < b.charAt(j)) return -1;
-            if(a.charAt(i) > b.charAt(j)) return 1;
-
-            i++;
-            j++;
+        if (a.length() != b.length()) {
+            return Integer.compare(a.length(), b.length());
         }
-        return 0;
+
+        return a.compareTo(b);
     }
 }
