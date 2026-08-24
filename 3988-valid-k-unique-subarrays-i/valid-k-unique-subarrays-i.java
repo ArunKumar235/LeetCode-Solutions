@@ -1,3 +1,5 @@
+// https://chatgpt.com/s/t_6a8bff17d8148191839bdaaebf4f4402
+
 // Mo's Algorithm = sqrt-based query ordering + sliding window state reuse.
 
 // SORT queries using blocks
@@ -81,7 +83,12 @@ class Solution{
             int r = query[1];
             int idx = query[2];
 
-            while(currL > l){
+            while(currL < l){
+                remove(nums[currL]);
+                currL++;
+            }
+            
+            while(l < currL){
                 currL--;
                 add(nums[currL]);
             }
@@ -91,16 +98,11 @@ class Solution{
                 add(nums[currR]);
             }
 
-            while(currL < l){
-                remove(nums[currL]);
-                currL++;
-            }
-
             while(currR > r){
                 remove(nums[currR]);
                 currR--;
             }
-
+            
             ans[idx] = unique == k && oddFreqCount == 0;
         }
         return ans;
