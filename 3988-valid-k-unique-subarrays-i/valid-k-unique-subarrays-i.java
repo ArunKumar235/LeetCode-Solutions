@@ -1,4 +1,5 @@
 // https://chatgpt.com/s/t_6a8bff17d8148191839bdaaebf4f4402
+// https://chatgpt.com/s/t_6a8d4645bdc48191a0acae4eae93861c
 
 // Mo's Algorithm = sqrt-based query ordering + sliding window state reuse.
 
