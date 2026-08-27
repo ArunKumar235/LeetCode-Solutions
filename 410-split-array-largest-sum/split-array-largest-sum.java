@@ -1,31 +1,38 @@
 class Solution {
     public int splitArray(int[] nums, int k) {
-        
-        int start = 0;
-        int end = 0;
-        for(int i: nums){
-            start = Math.max(start, i); 
-            end += i;
+        int total = 0;
+        int max = 0;
+        for(int num: nums){
+            max = Math.max(max, num);
+            total += num;
         }
 
-        while (start < end){
-            int mid = start+(end-start)/2;
-            int sum = 0;
-            int pieces = 1;
-            for(int i: nums){
-                if(sum + i > mid){
-                    pieces += 1;
-                    sum = i;
-                }else{
-                    sum += i;
-                }
-            }
-            if(pieces > k){
-                start = mid+1;
+        int l = max;
+        int r = total;
+        while(l < r){
+            int mid = l + (r-l)/2;
+            if(check(nums, k, mid)){
+                r = mid;
             }else{
-                end = mid;
+                l = mid + 1;
             }
         }
-        return start;
+        return r;
+    }
+
+    private boolean check(int[] nums, int k, int maxSubSum){
+        int count = 1;
+        int subSum = 0;
+        for(int num: nums){
+            if(num + subSum > maxSubSum){
+                subSum = num;
+                count++;
+            }else{
+                subSum += num;
+            }
+
+            if(count > k) return false;
+        }
+        return true;
     }
 }
