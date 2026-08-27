@@ -6,10 +6,10 @@ class Solution {
         int l = 1;
         int r = max;
         
-        while(l <= r){
+        while(l < r){
             int mid = l + (r-l)/2;
             if(check(quantities, n, mid)){
-                r = mid-1;
+                r = mid;
             }else{
                 l = mid+1;
             }
