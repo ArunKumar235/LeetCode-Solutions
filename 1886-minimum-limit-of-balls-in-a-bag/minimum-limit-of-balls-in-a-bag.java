@@ -20,7 +20,7 @@ class Solution {
     private boolean check(int[] nums, int maxOps, int maxBalls){
         int ops = 0;
         for(int num: nums){
-            ops += Math.ceil(num / (double) maxBalls) - 1;
+            ops += (num - 1) / maxBalls;
             
             if(ops > maxOps) return false;
         }
