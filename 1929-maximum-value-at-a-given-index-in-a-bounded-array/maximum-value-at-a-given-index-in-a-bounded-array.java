@@ -18,10 +18,7 @@ class Solution {
         int leftLen = idx;
         int rightLen = n - idx - 1;
 
-        long total = peak;
-        
-        total += sideSum(peak, leftLen);
-        total += sideSum(peak, rightLen);
+        long total = peak + sideSum(peak, leftLen) + sideSum(peak, rightLen);
 
         return total <= maxSum;
     }
@@ -30,10 +27,17 @@ class Solution {
     private long sideSum(int peak, int len) {
         if (len == 0) return 0;
 
-        if (peak > len) {
-            return (long) len * (2L * peak - len - 1) / 2;
-        }
+        int first = Math.max(peak - len, 1);
+        int last = peak - 1;
 
-        return (long) peak * (peak - 1) / 2 + (len - (peak - 1));
+        int count = last - first + 1;
+
+        long sum = (long) count * (first + last) / 2;
+
+        int remaining = len - count;
+
+        sum += remaining;
+
+        return sum;
     }
 }
