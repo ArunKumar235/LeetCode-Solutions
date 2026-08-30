@@ -47,7 +47,7 @@ class Solution {
             remaining -= count; 
         }
 
-        answer += (remaining % MOD) * minValue;
+        answer += (long) remaining * minValue;
 
         return (int) (answer % MOD);
     }
