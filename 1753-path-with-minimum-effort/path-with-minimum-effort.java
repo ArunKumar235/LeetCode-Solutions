@@ -3,7 +3,8 @@ class Solution {
         int R = heights.length;
         int C = heights[0].length;
 
-        boolean[][] visited = new boolean[R][C];
+        int[][] minDiff = new int[R][C];
+        for(int[] row: minDiff) Arrays.fill(row, Integer.MAX_VALUE);
 
         int[][] moves = new int[][]{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
@@ -19,7 +20,7 @@ class Solution {
             int currR = curr[1];
             int currC = curr[2];
 
-            visited[currR][currC] = true;
+            minDiff[currR][currC] = diff;
 
             if(currR == R-1 && currC == C-1) return diff;
 
@@ -28,11 +29,13 @@ class Solution {
                 int newC = currC + move[1];
 
                 if(newR < 0 || R <= newR || newC < 0 || C <= newC) continue;
-                if(visited[newR][newC]) continue;
 
                 int newDiff = Math.max(diff, Math.abs(heights[newR][newC] - heights[currR][currC]));
 
+                if(newDiff >= minDiff[newR][newC]) continue;
+
                 pq.offer(new int[]{newDiff, newR, newC});
+                minDiff[newR][newC] = newDiff;
             }
         }
         return -1;
