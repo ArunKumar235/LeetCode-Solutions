@@ -12,6 +12,7 @@ class Solution {
 
         // diff - r - c
         pq.offer(new int[]{0, 0, 0});
+        minDiff[0][0] = 0;
 
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
@@ -19,8 +20,6 @@ class Solution {
             int diff = curr[0];
             int currR = curr[1];
             int currC = curr[2];
-
-            minDiff[currR][currC] = diff;
 
             if(currR == R-1 && currC == C-1) return diff;
 
