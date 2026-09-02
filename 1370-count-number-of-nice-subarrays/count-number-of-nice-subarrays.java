@@ -1,24 +1,20 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
-        int l = 0;
+        return atMost(nums, k) - atMost(nums, k-1);
+    }
+
+    private int atMost(int[] nums, int k){
         int count = 0;
-        int res = 0;
+        int l = 0;
+        for(int r = 0; r < nums.length; r++){
+            if(nums[r] % 2 == 1) k--;
 
-        for(int r = 0; r<nums.length; r++){
-            if(nums[r] % 2 == 1){
-                k--;
-                count = 0;
+            while(k < 0){
+                if(nums[l++] % 2 == 1) k++;
             }
-
-            while(k == 0){
-                if(nums[l] % 2 == 1){
-                    k++;
-                }
-                l++;
-                count++;
-            }
-            res += count;
+            
+            count += r - l;
         }
-        return res;
+        return count;
     }
 }
