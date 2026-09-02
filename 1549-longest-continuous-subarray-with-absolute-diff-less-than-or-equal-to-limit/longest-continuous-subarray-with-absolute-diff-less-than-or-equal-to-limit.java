@@ -1,8 +1,10 @@
 class Solution {
     public int longestSubarray(int[] nums, int limit) {
         // maintain increasing order
+        // used to find the minimum element in current subarray
         Deque<Integer> incDQ = new ArrayDeque<>();
         // maintain decreasing order
+        // used to find the maximum element in current subarray
         Deque<Integer> decDQ = new ArrayDeque<>();
         
         int len = 0;
