@@ -2,17 +2,27 @@ class Solution {
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
 
-        int[] dp = new int[n];
-        Arrays.fill(dp, 1);
+        int[] seq = new int[n];
+        int size = 0;
 
-        for(int i = 0; i < n; i++){
-            for(int j = i+1; j < n; j++){
-                if(nums[i] < nums[j]) dp[j] = Math.max(dp[j], dp[i]+1);
+        for(int num: nums){
+            int l = 0;
+            int r = size;
+
+            // find the first position having value greater than or equal to curr value
+            while(l < r){
+                int mid = l + (r-l)/2;
+
+                if(seq[mid] < num){
+                    l = mid + 1;
+                }else{
+                    r = mid;
+                }
             }
+            seq[l] = num;
+
+            if(l == size) size++;
         }
-        
-        int max = 1;
-        for(int num: dp) max = Math.max(max, num);
-        return max;
+        return size;
     }
 }
