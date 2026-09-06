@@ -34,7 +34,6 @@ class Solution {
             while(!dq.isEmpty() && dq.peekLast()[0] >= threshold){
                 dq.pollLast();
             }
-            System.out.println(l);
             dq.offerLast(new long[]{threshold, r});
         }
         return dp[n];
