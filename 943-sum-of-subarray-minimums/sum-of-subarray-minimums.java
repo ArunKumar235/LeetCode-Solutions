@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 class Solution {
     public int sumSubarrayMins(int[] arr) {
         int[] nextSmaller = findNextSmallerElements(arr);
