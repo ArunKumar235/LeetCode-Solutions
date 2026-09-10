@@ -1,47 +1,67 @@
 class Solution {
+    int MOD = (int) 1e9 + 7;
     public int sumSubarrayMins(int[] arr) {
-        int[] nextSmaller = findNextSmallerElements(arr);
-        int[] prevSmaller = findPrevSmallerElements(arr);
+        int[] prevSmallerOrEqualIdx = findPrevSmallerOrEqualIdx(arr);
+        
+        int[] nextSmallerIdx = findNextSmallerIdx(arr);
+
         long total = 0;
-        int mod = (int)(1e9 + 7);
-        
-        for (int i = 0; i < arr.length; i++) {
-            int left = i - prevSmaller[i];
-            int right = nextSmaller[i] - i;
-            long contribution = (left * right * (long)arr[i]) % mod;
-            total = (total + contribution) % mod;
+
+        for(int i = 0; i < arr.length; i++){
+            long leftContribution = i - prevSmallerOrEqualIdx[i];
+            long rightContribution = nextSmallerIdx[i] - i;
+
+            long totalContributions = (leftContribution * rightContribution) % MOD;
+
+            total += (totalContributions * arr[i]) % MOD;
+            total %= MOD;
         }
-        
         return (int) total;
     }
-    
-    private int[] findNextSmallerElements(int[] arr) {
-        int[] nextSmaller = new int[arr.length];
-        Stack<Integer> stack = new Stack<>();
-        
-        for (int i = arr.length - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
-                stack.pop();
+
+    private int[] findPrevSmallerOrEqualIdx(int[] arr){
+        int n = arr.length;
+        int[] res = new int[n];
+
+        Stack<Integer> st = new Stack<>();
+
+        for(int i = 0; i < n; i++){
+            while(!st.isEmpty() && arr[st.peek()] > arr[i]){
+                st.pop();
             }
-            nextSmaller[i] = stack.isEmpty() ? arr.length : stack.peek();
-            stack.push(i);
+            res[i] = st.isEmpty() ? -1 : st.peek();
+
+            st.push(i);
         }
-        
-        return nextSmaller;
+        return res;
     }
-    
-    private int[] findPrevSmallerElements(int[] arr) {
-        int[] prevSmaller = new int[arr.length];
-        Stack<Integer> stack = new Stack<>();
-        
-        for (int i = 0; i < arr.length; i++) {
-            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
-                stack.pop();
+
+    private int[] findNextSmallerIdx(int[] arr){
+        int n = arr.length;
+        int[] res = new int[n];
+
+        Stack<Integer> st = new Stack<>();
+
+        for(int i = n-1; i >= 0; i--){
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]){
+                st.pop();
             }
-            prevSmaller[i] = stack.isEmpty() ? -1 : stack.peek();
-            stack.push(i);
+            res[i] = st.isEmpty() ? n : st.peek();
+
+            st.push(i);
         }
-        
-        return prevSmaller;
+        return res;
     }
 }
+
+// 1  4  6  7  3  7  8  1
+// 1  1  1  1  4  1  1  7 -> left contribution count
+// 8  3  1  1  3  2  1  1 -> right contribution count
+// 8  3  2  1 12  2  1  7 -> left * right
+// 8 12 12  7 36 14  8  7 -> (left * right) * arr[i]  
+
+// 1 1
+// 1 1 -> left contribution count 
+// 2 1 -> right contribution count
+// 2 1 -> left * right
+// 2 1 -> (left * right) * arr[i]
