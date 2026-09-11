@@ -91,6 +91,12 @@ class Solution {
             return 1L * left * right;
         }
 
+        if(left > right){
+            int temp = left;
+            left = right;
+            right = temp;
+        }
+
         // for the first 'maxValidLeft' values of left all `right` choices are valid.
         // left <= k - (right - 1)
         int maxValidLeft = k - (right - 1);
@@ -98,22 +104,22 @@ class Solution {
         long count = 1L * maxValidLeft * right;
 
         // remaining left choices have decreasing valid-right counts
-        // left choice left + (left - maxValidLeft) -> right - (left - maxValidLeft)
+        // left choice maxValidLeft + (left - maxValidLeft) -> right - (left - maxValidLeft)
         // ...
-        // left choice maxValidLeft + 2             -> right - 2
-        // left choice maxValidLeft + 1             -> right - 1 
-        // left choice maxValidLeft                 -> right
+        // left choice maxValidLeft + 2                     -> right - 2
+        // left choice maxValidLeft + 1                     -> right - 1 
+        // left choice maxValidLeft                         -> right
         // ...
-        // left choice 2                            -> right 
-        // left choice 1                            -> right 
+        // left choice 2                                    -> right 
+        // left choice 1                                    -> right 
         int remaining = left - maxValidLeft;
         
-        long removed =  1L * remaining * (remaining + 1) / 2;
+        // long removed =  0;
         // for(int i = 1; i <= remaining; i++){
         //     removed += i;
         // }
 
-        count += (1L * remaining * right) -  removed;
+        count += (1L * remaining * right) - (remaining * (remaining + 1) / 2);
 
         return count;
     }
