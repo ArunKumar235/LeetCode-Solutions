@@ -108,10 +108,10 @@ class Solution {
         // left choice 1                            -> right 
         int remaining = left - maxValidLeft;
         
-        long removed = 0;
-        for(int i = 1; i <= remaining; i++){
-            removed += i;
-        }
+        long removed =  1L * remaining * (remaining + 1) / 2;
+        // for(int i = 1; i <= remaining; i++){
+        //     removed += i;
+        // }
 
         count += (1L * remaining * right) -  removed;
 
