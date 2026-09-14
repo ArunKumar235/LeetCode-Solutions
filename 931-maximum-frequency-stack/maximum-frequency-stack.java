@@ -1,7 +1,7 @@
 class FreqStack {
     // val, freq
     HashMap<Integer, Integer> freq;
-    // freq, Stack<val>
+    // freq, Stack<val> (to retain the order of elements)
     HashMap<Integer, Stack<Integer>> map;
     int maxFreq;
 
