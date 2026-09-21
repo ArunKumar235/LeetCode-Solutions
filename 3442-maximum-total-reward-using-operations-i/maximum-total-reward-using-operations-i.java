@@ -3,8 +3,7 @@ class Solution {
         Arrays.sort(rewardValues);
 
         int n = rewardValues.length;
-        // max value of result could be 1999(total) + 2000(arr[i])
-        int[][] dp = new int[n][4000];
+        int[][] dp = new int[n][2001];
         for(int[] arr: dp) Arrays.fill(arr, -1);
 
         return func(0, 0, rewardValues, dp);
