@@ -11,7 +11,7 @@ class Solution {
     }
 
     private int func(int idx, int total, int[] arr, int[][] dp){
-        if(idx == arr.length) return total;
+        if(total > arr[arr.length-1] || idx == arr.length) return total;
 
         if(dp[idx][total] != -1) return dp[idx][total];
 
