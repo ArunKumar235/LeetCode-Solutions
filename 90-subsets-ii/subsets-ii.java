@@ -1,19 +1,25 @@
 class Solution {
+    List<List<Integer>> res;
+
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        Arrays.sort(nums); // Sort to ensure duplicate subsets have identical order
-        int len = 1 << nums.length;
+        res = new ArrayList<>();
+        Arrays.sort(nums); // Sort to handle duplicates easily
         
-        Set<List<Integer>> resSet = new HashSet<>();
-        
-        for(int i = 0; i < len; i++){
-            List<Integer> ss = new ArrayList<>();
-            for(int bit = 0; bit < nums.length; bit++){
-                if((i & (1 << bit)) != 0){
-                    ss.add(nums[bit]);
-                }
-            }
-            resSet.add(ss);
+        backtrack(0, nums, new ArrayList<>());
+
+        return res;
+    }
+    
+    private void backtrack(int idx, int[] nums, List<Integer> temp){
+        res.add(new ArrayList<>(temp));
+
+        for(int i = idx; i < nums.length; i++){
+            // Skip duplicates at the same recursive level
+            if(i > idx && nums[i] == nums[i-1]) continue; 
+
+            temp.add(nums[i]);
+            backtrack(i+1, nums, temp);
+            temp.remove(temp.size() - 1);
         }
-        return new ArrayList<>(resSet);
     }
 }
