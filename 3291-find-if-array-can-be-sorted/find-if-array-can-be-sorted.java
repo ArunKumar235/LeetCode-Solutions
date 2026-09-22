@@ -1,7 +1,6 @@
-
 class Solution {
     public boolean canSortArray(int[] nums) {
-        int prevMax = Integer.MIN_VALUE;
+        int prevMax = -1;
         int currMax = nums[0];
         int currMin = nums[0];
         int setBits = Integer.bitCount(nums[0]);
