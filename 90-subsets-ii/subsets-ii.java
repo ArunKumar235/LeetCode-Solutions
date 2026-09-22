@@ -1,6 +1,6 @@
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        Arrays.sort(nums);
+        Arrays.sort(nums); // Sort to ensure duplicate subsets have identical order
         int len = 1 << nums.length;
         
         Set<List<Integer>> resSet = new HashSet<>();
