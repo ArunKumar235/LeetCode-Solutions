@@ -1,45 +1,45 @@
 class Solution {
+    int res = 0;
+    String[] words;
+    int[] freq;
+    int[] score;
     public int maxScoreWords(String[] words, char[] letters, int[] score) {
-        int W = words.length;
-
-        int[] freq = new int[26];
+        this.words = words;
+        this.score = score;
+        this.freq = new int[26];
         for(char ch: letters){
             freq[ch - 'a']++;
         }
 
-        int maxScore = 0;
+        backtrack(0, 0);
 
-        for(int state = 1; state < (1<<W); state++){
-            int currScore = 0;
-            int[] currFreq = freq.clone();
-
-            for(int i = 0; i < W; i++){
-                if((state & (1<<i)) != 0){
-                    int wordScore = addScore(words[i], currFreq, score); 
-
-                    if(wordScore == -1){
-                        currScore = 0;
-                        break;
-                    }else{
-                        currScore += wordScore;
-                    }
-                }
-            }
-            maxScore = Math.max(maxScore, currScore);
-        }
-        return maxScore;
+        return res;
     }
 
-    private int addScore(String word, int[] freq, int[] score){
-        int currScore = 0;
-        
-        for(char ch: word.toCharArray()){
+    private void backtrack(int idx, int currScore){
+        if(idx == words.length){
+            res = Math.max(res, currScore);
+            return;
+        }
+
+        boolean isPossible = true;
+
+        for(char ch: words[idx].toCharArray()){
             freq[ch-'a']--;
             currScore += score[ch-'a'];
 
-            if(freq[ch-'a'] < 0) return 0;
+            if(freq[ch-'a'] < 0) isPossible = false;
         }
 
-        return currScore;
+        if(isPossible){
+           backtrack(idx + 1, currScore); 
+        }
+
+        for(char ch: words[idx].toCharArray()){
+            freq[ch-'a']++;
+            currScore -= score[ch-'a'];
+        }
+
+        backtrack(idx+1, currScore); 
     }
 }
