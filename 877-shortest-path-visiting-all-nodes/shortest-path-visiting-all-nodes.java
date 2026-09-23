@@ -1,49 +1,49 @@
 class Solution {
-    public static int shortestPathLength(int[][] graph) {
+    public int shortestPathLength(int[][] graph) {
         int n = graph.length;
+        
         boolean[][] visited = new boolean[n][1<<n];
-        Queue<Node> q = new LinkedList<>(); // store current level
-        int req = (1<<n) -1; // all nodes visited
+        Queue<Node> q = new LinkedList<>();
 
-        // initialize all the current nodes
-        for(int i = 0; i<n; i++){
-            int newTravel = 1<<i;
-            visited[i][newTravel] = true;
-            q.add(new Node(i, newTravel));
+        int visitedAll = (1<<n)-1;
+
+        for(int i = 0; i < n; i++){
+            int state = 1<<i;
+            visited[i][state] = true;
+            q.offer(new Node(i, state));
         }
-        // track steps
-        int res = 0;
+
+        int steps = 0;
         while(!q.isEmpty()){
             int size = q.size();
-            for(int i = 0; i<size; i++){
+            for(int i = 0; i < size; i++){
                 Node curr = q.poll();
-                int val = curr.val;
-                int travel = curr.travel;
+                int node = curr.currNode;
+                int state = curr.state;
 
-                if(travel==req){ // check if all nodes are visited
-                    return res;
-                }
+                if(state == visitedAll) return steps;
 
-                for(int newNode: graph[val]){
-                    int newTravel = travel | (1<<newNode);
-                    if(!visited[newNode][newTravel]){ // check if a path is already visited
-                        q.add(new Node(newNode, newTravel));
-                        visited[newNode][newTravel] = true;
-                    }
+                for(int nei: graph[node]){
+                    int newState = state | (1<<nei);
+
+                    if(visited[nei][newState]) continue;
+
+                    q.offer(new Node(nei, newState));
+                    visited[nei][newState] = true;
                 }
             }
-            res++;
+            steps++;
         }
-        return res;
+        return -1;
     }
 }
 
-
 class Node{
-    int val;
-    int travel;
-    Node(int val, int travel){
-        this.val = val;
-        this.travel = travel;
+    int currNode;
+    int state;
+
+    Node(int currNode, int state){
+        this.currNode = currNode;
+        this.state = state;
     }
 }
