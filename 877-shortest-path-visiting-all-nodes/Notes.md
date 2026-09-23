@@ -1,1 +1,1 @@
-<h2>shortest-path-visiting-all-nodes Notes</h2><hr>[ Time taken: 22hrs 32m 36s ]
+<h2>shortest-path-visiting-all-nodes Notes</h2><hr>[ Time taken: 1hr 53m 33s ]
