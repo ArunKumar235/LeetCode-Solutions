@@ -1,1 +1,1 @@
-<h2>range-frequency-queries Notes</h2><hr>[ Time taken: 2hrs 5m 19s ]
+<h2>range-frequency-queries Notes</h2><hr>[ Time taken: 7m 47s ]
