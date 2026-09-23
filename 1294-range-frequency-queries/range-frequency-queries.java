@@ -1,65 +1,53 @@
 class RangeFreqQuery {
-    int[] arr;
-    int blockSize;
-    List<Map<Integer, Integer>> blocks;
+    Map<Integer, List<Integer>> freq = new HashMap<>();
 
     public RangeFreqQuery(int[] arr) {
-        this.arr = arr;
-
-        int n = arr.length;
-        blockSize = (int) Math.sqrt(n) + 1;
-
-        int blockCount = (n + blockSize - 1) / blockSize;
-
-        blocks = new ArrayList<>();
-        for(int i = 0; i < blockCount; i++) blocks.add(new HashMap<>());
-
-        for(int i = 0; i < n; i++){
-            int block = i / blockSize;
-
-            Map<Integer, Integer> freq = blocks.get(block);
-            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
-        }
+        for(int i = 0; i < arr.length; i++){
+            if(!freq.containsKey(arr[i])){
+                freq.put(arr[i], new ArrayList<>());
+            }
+            freq.get(arr[i]).add(i);
+        }    
     }
     
     public int query(int left, int right, int value) {
-        int count = 0;
+        if(!freq.containsKey(value)) return 0;
+        
+        List<Integer> pos = freq.get(value);
 
-        int leftBlock = left / blockSize;
-        int rightBlock = right / blockSize;
+        return upperBound(pos, right) - lowerBound(pos, left);
+    }
 
-        // same block
-        if(leftBlock == rightBlock){
-            for(int i = left; i <= right; i++){
-                if(arr[i] == value){
-                    count++;
-                }
-            }
-            return count;
-        }
+    private int upperBound(List<Integer> pos, int idx){
+        int l = 0;
+        int r = pos.size();
 
-        // left partial block
-        int leftEnd = (leftBlock + 1) * blockSize - 1;
-        for(int i = left; i <= leftEnd; i++){
-            if(arr[i] == value){
-                count++;
+        while(l < r){
+            int mid = l + (r-l)/2;
+
+            if(pos.get(mid) > idx){
+                r = mid;
+            }else{
+                l = mid+1;
             }
         }
+        return l;
+    }
 
-        // complete blocks
-        for(int block = leftBlock + 1; block < rightBlock; block++){
-            count += blocks.get(block).getOrDefault(value, 0);
-        }
+    private int lowerBound(List<Integer> pos, int idx){
+        int l = 0;
+        int r = pos.size();
 
-        // right partial block
-        int rightStart = rightBlock * blockSize;
-        for(int i = rightStart; i <= right; i++){
-            if(arr[i] == value){
-                count++;
+        while(l < r){
+            int mid = l + (r-l)/2;
+
+            if(pos.get(mid) >= idx){
+                r = mid;
+            }else{
+                l = mid+1;
             }
         }
-
-        return count;
+        return l;
     }
 }
 
