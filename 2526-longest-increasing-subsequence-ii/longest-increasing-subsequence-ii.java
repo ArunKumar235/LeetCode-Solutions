@@ -22,6 +22,7 @@ class SegmentTree{
     static Node head;
 
     class Node{
+        // longest increasing subarray length, whos last element lies in between l and r
         int val;
 
         int l;
