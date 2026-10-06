@@ -2,40 +2,52 @@ class Solution {
     public int findMaximumLength(int[] nums) {
         int n = nums.length;
 
-        long[] prefix = new long[n+1];
-        for(int i = 1; i <= n; i++){
-            prefix[i] = prefix[i-1] + nums[i-1];
+        long[] prefix = new long[n + 1];
+        for (int i = 0; i < n; i++){
+            prefix[i + 1] = prefix[i] + nums[i];
         }
 
-        int[] dp = new int[n+1];
-        
-        // threshold, idx
-        // threshold tells us the minimum future prefix sum required before this index can be used as l
-        // maintain thresholds in increasing order
-        Deque<long[]> dq = new ArrayDeque<>();
+        int[] dp = new int[n + 1];
+        int[] previous = new int[n + 2];
 
-        int l = 0;
+        for (int i = 1; i <= n; i++){
+            // Best previous boundary available for i
+            previous[i] = Math.max(previous[i], previous[i - 1]);
 
-        for(int r = 1; r <= n; r++){
-            // if prefix[r] >= threshold then that candidate has become valid
-            // because thresholds are increasing, all candidates that have become valid are at the front
-            while(!dq.isEmpty() && dq.peekFirst()[0] <= prefix[r]){
-                l = (int) dq.pollFirst()[1];
-            }
+            // Make one more segment
+            dp[i] = dp[previous[i]] + 1;
 
-            dp[r] = dp[l] + 1;
+            // previous segment:
+            // prefix[i] - prefix[previous[i]]
 
-            // for some future idx next, to be valid
-            // prefix[next] - prefix[r] >= prefix[r] - prefix[l]
-            // prefix[next] >= 2 * prefix[r] - prefix[l]
-            long threshold = 2 * prefix[r] - prefix[l];
+            // Next segment must have at least the same sum:
+            // prefix[j] - prefix[i]
             
-            // maintain threshold in increasing order
-            while(!dq.isEmpty() && dq.peekLast()[0] >= threshold){
-                dq.pollLast();
-            }
-            dq.offerLast(new long[]{threshold, r});
+            // prefix[j] - prefix[i] >= prefix[i] - prefix[previous[i]]
+            // prefix[j] >= 2 * prefix[i] - prefix[previous[i]]
+            
+            long target = 2 * prefix[i] - prefix[previous[i]];
+
+            int j = lowerBound(prefix, target);
+
+            previous[j] = i;
         }
         return dp[n];
+    }
+
+    private int lowerBound(long[] arr, long target){
+        int left = 0;
+        int right = arr.length;
+
+        while (left < right){
+            int mid = left + (right - left) / 2;
+
+            if(arr[mid] >= target){
+                right = mid;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return left;
     }
 }
