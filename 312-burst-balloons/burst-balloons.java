@@ -1,30 +1,32 @@
 class Solution {
+    int[] coins;
+    int[][] dp;
     public int maxCoins(int[] nums) {
         int n = nums.length;
-        int[] arr = new int[n+2];
-        for(int i=0; i<n; i++){
-            arr[i+1] = nums[i];
-        }
-        arr[0] = arr[n+1] = 1;
-        int[][] dp = new int[n+2][n+2];
-        for(int i =0; i<dp.length; i++){
-            Arrays.fill(dp[i], -1);
-        }
-        return solve(arr, dp, 1, n);
+        
+        this.coins = new int[n+2];
+        coins[0] = 1;
+        coins[n+1] = 1;
+        for(int i = 0; i < n; i++) coins[i+1] = nums[i];
+
+        this.dp = new int[n+2][n+2];
+        for(int[] row: dp) Arrays.fill(row, -1);
+
+        return func(0, n+1);    
     }
 
-    public int solve(int[] arr, int[][] dp, int left, int right){
-        if(left>right){
-            return 0;
+    private int func(int l, int r){
+        if(l + 1 == r) return 0;
+
+        if(dp[l][r] != -1) return dp[l][r];
+
+        int res = 0;
+        for(int k = l + 1; k < r; k++){
+            res = Math.max(
+                res,
+                func(l, k) + func(k, r) + (coins[l] * coins[k] * coins[r]) 
+            );
         }
-        if(dp[left][right]!=-1){
-            return dp[left][right];
-        }
-        int maxPoints = -1;
-        for(int index = left; index<=right; index++){
-            maxPoints = Math.max(maxPoints, solve(arr, dp, left, index-1)+solve(arr, dp, index+1 ,right) + arr[left-1]*arr[index]*arr[right+1]);
-        }
-        dp[left][right] = maxPoints;
-        return maxPoints;
+        return dp[l][r] = res;
     }
 }
