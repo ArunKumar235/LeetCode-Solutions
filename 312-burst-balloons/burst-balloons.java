@@ -17,6 +17,7 @@ class Solution {
                 }
 
                 dp[l][r] = 0;
+                // k is choosen as the last balloon to be burst in the boundary of (l, r)
                 for(int k = l + 1; k < r; k++){
                     dp[l][r] = Math.max(
                         dp[l][r], 
