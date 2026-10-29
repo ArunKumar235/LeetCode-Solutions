@@ -1,8 +1,19 @@
 class Solution {
+    boolean[][] isPal;
     public int minCut(String s) {
-        int[] dp = new int[s.length()];
+        int n = s.length();
+        int[] dp = new int[n];
         Arrays.fill(dp, -1);
 
+        isPal = new boolean[n][n];
+
+        for(int l = n-1; l >= 0; l--){
+            for(int r = l; r < n; r++){
+                if(s.charAt(l) == s.charAt(r) && (r-l <= 2 || isPal[l+1][r-1])){
+                    isPal[l][r] = true;
+                }
+            }
+        }
         return func(0, s, dp) - 1;
     }
 
@@ -12,17 +23,10 @@ class Solution {
 
         int res = Integer.MAX_VALUE;
         for(int k = l; k < s.length(); k++){
-            if(isPal(s, l, k)){
+            if(isPal[l][k]){
                 res = Math.min(res, 1 + func(k+1, s, dp));
             }
         }
         return dp[l] = res;
-    }
-
-    private boolean isPal(String s, int l, int r){
-        while(l < r){
-            if(s.charAt(l++) != s.charAt(r--)) return false;
-        }
-        return true;
     }
 }
