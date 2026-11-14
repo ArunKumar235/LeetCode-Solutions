@@ -1,39 +1,35 @@
 class Solution {
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         if(n == 1) return Arrays.asList(0);
-
+        
         List<List<Integer>> adj = new ArrayList<>();
-        int[] edgeCount = new int[n];
+        for(int i = 0; i < n; i++) adj.add(new ArrayList<>());
 
-        for(int i = 0; i<n; i++) adj.add(new ArrayList<>());
-
+        int[] deg = new int[n];
         for(int[] e: edges){
-            adj.get(e[0]).add(e[1]);
-            adj.get(e[1]).add(e[0]);
-
-            edgeCount[e[0]]++;
-            edgeCount[e[1]]++;
+            int u = e[0];
+            int v = e[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+            deg[u]++;
+            deg[v]++;
         }
 
-        Queue<Integer> leaves = new ArrayDeque<>();
-        for(int i = 0; i<n; i++){
-            if(edgeCount[i] == 1) leaves.offer(i);
+        Queue<Integer> leaves = new LinkedList<>();
+        for(int i = 0; i < n; i++){
+            if(deg[i] == 1) leaves.offer(i);
         }
 
         while(n > 2){
             int size = leaves.size();
             n -= size;
 
-            for(int i = 0; i<size; i++){
-                int leaf = leaves.poll();
-                edgeCount[leaf]--;
-                
-                for(int nei: adj.get(leaf)){
-                    edgeCount[nei]--;
+            while(size-- > 0){
+                int u = leaves.poll();
 
-                    if(edgeCount[nei] == 1){
-                        leaves.add(nei);
-                    }
+                for(int v: adj.get(u)){
+                    deg[v]--;
+                    if(deg[v] == 1) leaves.offer(v);
                 }
             }
         }
