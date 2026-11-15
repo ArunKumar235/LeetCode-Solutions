@@ -1,3 +1,4 @@
+// https://www.youtube.com/watch?v=GSBLe8cKu0s
 class Solution {
     public List<List<Integer>> getSkyline(int[][] buildings) {
         List<List<Integer>> res = new ArrayList<>();
