@@ -1,38 +1,45 @@
+// We don't need to explicitly remove every expired interval.
+
+// The heap is sorted by interval length, not ending time.
+// An expired interval might remain somewhere inside the heap. 
+// That's okay because it cannot affect the answer unless it reaches the top.
 class Solution {
     public int[] minInterval(int[][] intervals, int[] queries) {
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        // sort intervals by left asc
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        int[][] qs = new int[queries.length][2];
+        for(int i = 0; i < queries.length; i++){
+            qs[i][0] = queries[i];
+            qs[i][1] = i;
+        }
+        // sort queries asc
+        Arrays.sort(qs, (a, b) -> Integer.compare(a[0], b[0]));
+
+        // [intervalLen, right] fetch smallest intervalLen in O(1)
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
         
-        int[] Q = queries.clone();
-        Arrays.sort(Q);
+        int[] res = new int[queries.length];
+        int idx = 0;
+        
+        for(int[] query: qs){
+            int q = query[0];
+            int orgIdx = query[1];
 
-        // interval size - right interval
-        PriorityQueue<int[]> eligible = new PriorityQueue<>((a, b) ->{
-            if(a[0] == b[0]) return a[1] - b[1];
-            return a[0] - b[0];
-        });
+            while(idx < intervals.length && intervals[idx][0] <= q){
+                int l = intervals[idx][0];
+                int r = intervals[idx][1];
 
-        int i = 0;
-        Map<Integer, Integer> res = new HashMap<>();
-
-        for(int q: Q){
-            while(i < intervals.length && intervals[i][0] <= q){
-                int l = intervals[i][0];
-                int r = intervals[i++][1];
-
-                eligible.offer(new int[]{r-l +1, r});
+                minHeap.offer(new int[]{r - l + 1, r});
+                idx++;
             }
 
-            while(!eligible.isEmpty() && eligible.peek()[1] < q){
-                eligible.poll();
+            // skip ineligible intervals
+            while(!minHeap.isEmpty() && minHeap.peek()[1] < q){
+                minHeap.poll();
             }
-            res.put(q, eligible.isEmpty() ? -1 : eligible.peek()[0]);
+            res[orgIdx] = minHeap.isEmpty() ? -1 : minHeap.peek()[0];
         }
-
-        i = 0;
-        int[] answer = new int[queries.length];
-        for(int q: queries){
-            answer[i++] = res.get(q);
-        }
-        return answer;
+        return res;
     }
 }
