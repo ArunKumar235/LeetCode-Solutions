@@ -3,18 +3,24 @@ class Solution {
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
 
         List<int[]> res = new ArrayList<>();
-        int n = intervals.length;
 
-        for(int i = 0; i < n; i++){
-            int l = intervals[i][0];
-            int r = intervals[i][1];
-            
-            while(i+1 < n && intervals[i+1][0] <= r){
-                r = Math.max(r, intervals[i+1][1]);
-                i++;
+        int prevStart = intervals[0][0];
+        int prevEnd = intervals[0][1];
+
+        for(int[] interval: intervals){
+            int start = interval[0];
+            int end = interval[1];
+
+            if(prevEnd < start){
+                res.add(new int[]{prevStart, prevEnd});
+                prevStart = start;
+                prevEnd = end;
+            }else{
+                prevEnd = Math.max(prevEnd, end);
             }
-            res.add(new int[]{l, r});
         }
+        res.add(new int[]{prevStart, prevEnd});
+
         return res.toArray(int[][]::new);
     }
 }
