@@ -1,30 +1,24 @@
 class Solution {
     public int scheduleCourse(int[][] courses) {
-        
-        Arrays.sort(courses, (a, b) -> (a[1] - b[1]));
-        PriorityQueue<int[]> maxh = new PriorityQueue<>((a, b) -> (b[0] - a[0]));
+        // sort by last day asc
+        Arrays.sort(courses, (a, b) -> a[1] - b[1]);
+        // remove course with highest duration in O(1)
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
 
-        int days = 0;
+        int res = 0;
+        int totalDuration = 0;
+        for(int[] course: courses){
+            int duration = course[0];
+            int lastDay = course[1];
 
-        for(int[] course : courses){
-            if (course[0] > course[1]) continue;
+            totalDuration += duration;
+            maxHeap.offer(duration);
 
-            days += course[0];
-
-            if(days > course[1]){
-                int[] longestCourse = maxh.peek();
-
-                if(longestCourse[0] >= course[0]){
-                    maxh.poll();
-                    days -= longestCourse[0];
-                    maxh.add(course);
-                }else{
-                    days -= course[0];
-                }
-            }else{
-                maxh.add(course);
+            if(lastDay < totalDuration){
+                totalDuration -= maxHeap.poll();
             }
+            res = Math.max(res, maxHeap.size());
         }
-        return maxh.size();
+        return res;
     }
 }
