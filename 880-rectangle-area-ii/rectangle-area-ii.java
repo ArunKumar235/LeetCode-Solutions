@@ -1,81 +1,60 @@
-/*
-We need to calculate the total union area of all rectangles, 
-avoiding double-counting overlapping regions.
-
-Instead of calculating rectangle areas directly, 
-use Coordinate Compression to divide the plane into smaller, non-overlapping cells.
-(sum areas cell by cell, skip overlapping duplicate cells)
-
-Mark each cell as visited when it is covered by a rectangle. Count its area only once.
+/* 
+    A horizontal line sweeps from bottom to top over the shapes.
+    Each shape contribute two events, open event on bottom line, close event on top line.
+    On open event, the horizontal interval starts contributing to the area.
+    On close event, the horizontal interval stops contributing to the area.
 */
 class Solution {
     long MOD = (long) 1e9 + 7;
     public int rectangleArea(int[][] rectangles) {
-        TreeSet<Integer> x = new TreeSet<>();
-        TreeSet<Integer> y = new TreeSet<>();
-        
-        // store all unique x and y coordinates in sorted sequence
+        int OPEN = 0, CLOSE = 1;
+        int[][] events = new int[rectangles.length * 2][3];
+
+        int idx = 0;
         for(int[] rect: rectangles){
             int x1 = rect[0];
             int y1 = rect[1];
             int x2 = rect[2];
             int y2 = rect[3];
 
-            x.add(x1);
-            x.add(x2);
-            y.add(y1);
-            y.add(y2);
+            events[idx++] = new int[]{y1, OPEN, x1, x2};
+            events[idx++] = new int[]{y2, CLOSE, x1, x2};
         }
 
-        // coordinate compress to reduce 10^9 range to atmost 2N unique coordinates across each axis
-        
-        // Coordinate value -> Compressed index
-        Map<Integer, Integer> xCoord = new HashMap<>();
-        Map<Integer, Integer> yCoord = new HashMap<>();
+        // sort events by y asc
+        Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
 
-        // Compressed index -> Actual coordinate value
-        int[] xVal = new int[x.size()];
-        int[] yVal = new int[y.size()];
-        
-        int idx = 0;
-        for(int coord: x){
-            xCoord.put(coord, idx);
-            xVal[idx] = coord;
-            idx++;
-        }
-        
-        idx = 0;
-        for(int coord: y){
-            yCoord.put(coord, idx);
-            yVal[idx] = coord;
-            idx++; 
-        }
+        List<int[]> active = new ArrayList<>();
+        int currY = events[0][0];
 
-        boolean[][] vis = new boolean[x.size()][y.size()];
+        long res = 0;
+        for(int[] event: events){
+            int y = event[0], type = event[1], x1 = event[2], x2 = event[3];
 
-        long area = 0;
-        for(int[] rect: rectangles){
-            int startX = rect[0];
-            int endX = rect[2];
-            
-            int startY = rect[1];
-            int endY = rect[3];
-            
-            for(int i = xCoord.get(startX); i < xCoord.get(endX); i++){
-                
-                for(int j = yCoord.get(startY); j < yCoord.get(endY); j++){
-                    if(vis[i][j]) continue; // cell area already added;
+            // calculate query
+            long query = 0;
+            int currX = -1;
+            for(int[] interval: active){
+                currX = Math.max(currX, interval[0]);
+                query += Math.max(interval[1] - currX, 0);
+                currX = Math.max(currX, interval[1]);
+            }
 
-                    long w = (long) xVal[i+1] - xVal[i];
-                    long h = (long) yVal[j+1] - yVal[j];
+            res += query * (y - currY);
 
-                    area += (h * w) % MOD;
-                    area %= MOD;
-
-                    vis[i][j] = true;
+            if(type == OPEN){
+                active.add(new int[]{x1, x2});
+                Collections.sort(active, (a, b) -> Integer.compare(a[0], b[0]));
+            }else{
+                for(int i = 0; i < active.size(); i++){
+                    if(active.get(i)[0] == x1 && active.get(i)[1] == x2){
+                        active.remove(i);
+                        break;
+                    }
                 }
             }
+            currY = y;
         }
-        return (int) area;
+        return (int) (res % MOD);
     }
 }
