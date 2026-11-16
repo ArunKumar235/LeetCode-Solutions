@@ -27,7 +27,7 @@ class Solution {
             y.add(y2);
         }
 
-        // coordinate compress to reduce 10^9 range to 200 unique coordinates
+        // coordinate compress to reduce 10^9 range to atmost 2N unique coordinates across each axis
         
         // Coordinate value -> Compressed index
         Map<Integer, Integer> xCoord = new HashMap<>();
