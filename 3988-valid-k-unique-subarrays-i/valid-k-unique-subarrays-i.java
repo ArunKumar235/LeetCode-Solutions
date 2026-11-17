@@ -70,6 +70,8 @@ class Solution{
         int max = 0;
         for(int num : nums) max = Math.max(max, num);
 
+        // since nums[i] is limited to 10^5, we use freq array
+        // if larger, we could Coordinate compress values
         freq = new int[max + 1];
 
         boolean[] ans = new boolean[queries.length];
