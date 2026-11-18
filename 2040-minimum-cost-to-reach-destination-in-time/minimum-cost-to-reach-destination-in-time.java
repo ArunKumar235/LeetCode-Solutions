@@ -22,10 +22,10 @@ class Solution {
         pq.offer(new int[]{0, 0, passingFees[0]});
 
         // node - time
-        int[][] dp = new int[n][maxTime+1];
-        for(int[] row: dp) Arrays.fill(row, Integer.MAX_VALUE);
+        int[] bestTime = new int[n];
+        Arrays.fill(bestTime, Integer.MAX_VALUE);
 
-        dp[0][0] = passingFees[0];
+        bestTime[0] = 0;
 
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
@@ -41,8 +41,8 @@ class Solution {
                 int newCost = cost + passingFees[v];
                 
                 if(newTime > maxTime) continue;
-                if(newCost < dp[v][newTime]){
-                    dp[v][newTime] = newCost;
+                if(newTime < bestTime[v]){
+                    bestTime[v] = newTime;
                     pq.offer(new int[]{v, newTime, newCost});
                 }
             }
