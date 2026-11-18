@@ -1,6 +1,8 @@
 class Solution {
     public int maxEnvelopes(int[][] envelopes) {
-        
+        // sort by width asc
+        // height desc during same width
+        // (so that same width dolls is not counted for LIS) (2, 3) cannot fit inside (2,4)
         Arrays.sort(envelopes, (a, b) -> {
             if (a[0] == b[0]) {
                 return b[1] - a[1];
@@ -8,7 +10,8 @@ class Solution {
                 return a[0] - b[0];
             }
         });
-
+        
+        // perform LIS on height values
         int n = envelopes.length;
         List<Integer> li = new ArrayList<>();
         li.add(envelopes[0][1]);
@@ -40,4 +43,4 @@ class Solution {
         }
         return start;
     }
-}
+} 
