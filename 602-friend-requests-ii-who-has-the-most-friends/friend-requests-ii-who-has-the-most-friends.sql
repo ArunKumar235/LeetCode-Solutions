@@ -1,19 +1,12 @@
 -- Write your PostgreSQL query statement below
-WITH 
-r1 AS (    
-    SELECT DISTINCT requester_id AS id, COUNT(*) AS num 
-    FROM requestaccepted r1
-    GROUP BY requester_id
-),
-r2 AS (
-    SELECT DISTINCT accepter_id AS id, COUNT(*) AS num 
-    FROM requestaccepted r1
-    GROUP BY accepter_id
+WITH all_ids AS (    
+    SELECT requester_id AS id FROM requestaccepted
+    UNION ALL
+    SELECT  accepter_id AS id FROM requestaccepted
 )
 
-SELECT COALESCE(r1.id, r2.id) AS id, (COALESCE(r1.num, 0) + COALESCE(r2.num, 0)) AS  num
-FROM r1 
-FULL JOIN r2
-ON r1.id = r2.id
+SELECT id, COUNT(*) AS num 
+FROM all_ids
+GROUP BY id
 ORDER BY num DESC
 LIMIT 1
